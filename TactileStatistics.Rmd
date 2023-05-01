@@ -3,39 +3,165 @@ title: "Tactile navigation"
 author: "Jeppe"
 date: '2023-05-01'
 output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
 
 #Imports data outside working directory
 library(readxl)
-filename = "~/Downloads/Big-merge.xlsx" #path for macbook downloads folder
-Big_merge <- read_excel(filename)
-View(Big_merge)
+filename = "~/Downloads/A - SART&SUS&DEMOGRAPHICS.xlsx" #path for macbook downloads folder
+SartSusDemo <- read_excel(filename, sheet= "Rexport")
 
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Population
 
 ```{r}
-data <- read.csv(file.choose())
+
+GenderCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Gender))
+GenderCondition + geom_bar(col="black", size=.3)
+
+AgeCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Age,fill = Condition))
+AgeCondition + geom_bar(col="black", size=.3) + scale_y_discrete(name = "Count", limits=c(0,1,2,3,4,5,6,7,8,9,10)) 
 ```
 
-```{r cars}
-summary(cars)
+
+```{r}
+BarSusCondition=ggplot(data=SartSusDemo, mapping=aes(x=SUS,fill = Gender))+(
+  geom_histogram(binwidth = 1, 
+                   col="black", 
+                   size=.1))
+BarSartCondition=ggplot(data=SartSusDemo, mapping=aes(x=SART,fill = Gender))+(
+  geom_histogram(binwidth = 1, 
+                   col="black", 
+                   size=.1))
+BarSusCondition
+BarSartCondition
+```
+## Boxplots
+
+```{r}
+library(ggplot2)
+SusCondition=ggplot(data=SartSusDemo, mapping=aes(x=Condition, y=SUS,fill = Condition))+geom_boxplot()
+SartCondition=ggplot(data=SartSusDemo, mapping=aes(x=Condition, y=SART,fill = Condition))+geom_boxplot()
+SusGender=ggplot(data=SartSusDemo, mapping=aes(x=Gender, y=SUS,fill = Gender))+geom_boxplot()
+SartGender=ggplot(data=SartSusDemo, mapping=aes(x=Gender, y=SART,fill = Gender))+geom_boxplot()
+SusComputerGames=ggplot(data=SartSusDemo, mapping=aes(x=ComputerGames, y=SUS,fill = ComputerGames))+geom_boxplot()
+SartComputerGames=ggplot(data=SartSusDemo, mapping=aes(x=ComputerGames, y=SART,fill = ComputerGames))+geom_boxplot()
+
+SusCondition
+SartCondition
+SusGender
+SartGender
+SusComputerGames
+SartComputerGames
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+
+##T-tests
+```{r}
+Combi <- SartSusDemo[which(SartSusDemo$Condition=='combination'),]
+Touch <- SartSusDemo[which(SartSusDemo$Condition=='touch_only'),]
+Bar <- SartSusDemo[which(SartSusDemo$Condition=='bar'),]
+Acrylic <- SartSusDemo[which(SartSusDemo$Condition=='acrylic'),]
+
+CombiTouch <- subset(SartSusDemo, Condition=='combination' | Condition=='touch_only', 
+select=c(Participants, SUS,Condition))
+
+
+TSusCondition = t.test(formula = SUS ~ Condition, data = CombiTouch)
+TSusCondition
+
+#one.way <- aov(SUS ~ Condition, data = SartSusDemo)
+#summary(one.way)
+
+```
+
+```{r}
+TSusGender = t.test(formula = SUS ~ Gender, data = SartSusDemo)
+TSartGender = t.test(formula = SART ~ Gender, data = SartSusDemo)
+
+TSusGender
+TSartGender
+
+```
+
+# Hypoteser
+
+1.  Der er forskel mellem aid og no aid
+2.  Én aid er bedre end de andre
+3.  Hvor meget man spiller computerspil har en indflydelse på hvor godt
+    man kører
+4.  Lange glances leder til flere crashes eller swerves
+5.  Køreevne er forskellige mellem mænd og kvinder
+
+# Datavisualisering
+
+**Plot of means** eller **Boxplot** Overblik over alle forskellige
+produkt metrics og aid konditioner
+
+For hver aid kondition: \* `Total glance time` \* `Glances per task` \*
+`Total glances` \* `Total lane breaks` \* `Total crashes` \* `SUS` \*
+`SART`
+
+Aid kondition på x-akse, metric på y-akse
+
+Hvis vi laver alle plots i samme rækkefølge kan vi lave et stort grid af
+plots for nem sammenligning på tværs af metrics og konditioner.
+
+# Test
+
+Hvilke test skal vi lave på hvilke metrics for hver af de mulige
+hypoteser
+
+### Én aid er bedre end no aid og de andre aids
+
+**Variabler** Independent variable: \* kondition Dependent variables:
+(Kan ville lægge alle dem her sammen på en måde? Altså en samlet
+kørescore) \* `Total glance time` \* `Glances per task` \*
+`Total glances` \* `Total lane breaks` \* `Total crashes`
+
+**Signifikans test** \* ANOVA på alle køre metrics for hver kondition
+(Det bliver mange tal) \* ANOVA på SUS score for hver kondition \* ANOVA
+på SART score for hver kondition
+
+**Alpha inflation korrektion** Benjamini--Hochberg adjustment (Benjamini
+and Hochberg, 1995) (Sauro & Lewis, 2016 p. 266). Det er en mindre
+konservativ korrektion end Bon Ferroni så der er større change for at
+finde en effekt men vi korrigere stadig for gentagne test (alpha
+inflation).
+
+### Lange glances leder til crash eller swerve
+
+Independent variable: \* `GT>1.5` \* `TGT>12`
+
+Dependent variables:
+
+### Hvor meget man spiller computerspil har en indflydelse på hvor godt man kører
+
+Independent variable: \* Over / under 5 timer gaming om ugen (`5+` /
+`5-`)
+
+Dependent variables: \* Total crashes \* Total lane breaks
+
+ANOVA på om `5-` er anderledes end `5+` og om der er interaktion mellem
+`Crash` og `lane break`
+
+\# Requirements \### 12 sek glance per opgave Mean total glance time for
+hver opgave. Vi skal sortere i de opgaver der ikke kan bruges til noget
+her. Det vil måske være lidt useless fordi de dybere opgaver ikke er
+færdige nok til at teste på.
 
 ```{r pressure, echo=FALSE}
 plot(pressure)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Note that the `echo = FALSE` parameter was added to the code chunk to
+prevent printing of the R code that generated the plot.
