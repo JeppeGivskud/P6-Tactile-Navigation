@@ -15,36 +15,130 @@ library(ggplot2)
 #Imports data outside working directory
 library(readxl)
 filename = "~/Downloads/A - SART&SUS&DEMOGRAPHICS.xlsx" #path for macbook downloads folder
-SartSusDemo <- read_excel(filename, sheet= "Rexport")
+SartSusDemo <- read_excel(filename, sheet= "DataanalyseExport")
 
 ```
 
-## Population
+## Population distribution
 
-```{r}
+```{r} 
+#                         !!!LÆS DETTE FOR AT FORSTÅ!!!
+#Der bruges forskellige funktioner i disse plots. 
+#Den første funktion ggplot vælger data og x og y akser. Eksempelevis x=condition og så fylder den farve på efter gender.
+#Geom bar gør at plottet er et barplot med en stregtykkelse 
+#Scale_y_continuous gør at man kan ændre y aksen med label og hakker
+#scale_y_discrete gør man kan ændre y aksen med label og labels (for konditioner)
+#scale_x_binned deler yeardriverslicence op i 16 grupper
+#scale_fill_discrete gør man kan ændre labels på legend med titel og konditioner
+#ggtitle ændrer titel
+#Siden titlerne er ændret skal man lige fjerne dem og se om der er byttet rundt på konditioner. Man kan nemlig godt kalde bar for acrylic og så bliver vi forvirret
 
 GenderCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Gender))
-GenderCondition + geom_bar(col="black", size=.3)
+GenderCondition + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:15)) + ggtitle("Gender distribution")
 
 AgeCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Age,fill = Condition))
-AgeCondition + geom_bar(col="black", size=.3) + scale_y_discrete(name = "Count", limits=factor(c(0,1,2,3,4,5,6,7,8,9,10))) +scale_x_continuous(breaks = c(20:34))
+AgeCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_continuous(breaks = c(20:34)) + scale_fill_discrete(name = "Condition", labels = c("Acrylic", "Bar", "Combination","Touch only")) + ggtitle("Age distribution")
 
-#limits gør så man kan sætte hakker ved categoriske variabler (men kategorierne er numre haha)
-#breaks sætter hakker mellem 20 og 34 
+ComputerCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = ComputerGames))
+ComputerCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Computer gaming (Hours)") + ggtitle("Gaming experience distribution")
+
+DrivingCondition <- ggplot(data=SartSusDemo, mapping=aes(x=YearDriversLicence,fill = Condition))
+DrivingCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_binned(n.breaks = 20) + scale_fill_discrete(name = "Condition", labels = c("Acrylic", "Bar", "Combination","Touch only")) + ggtitle("Drivers licence distribution")
+
+SimulatorExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Experience))
+SimulatorExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Car simulator experience") + ggtitle("Car simulator experience distribution")
+
+CarGamesCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarGames))
+CarGamesCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Car gaming (Hours)") + ggtitle("Car gaming experience distribution")
+
+SimulatorExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarSimulators))
+SimulatorExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Simulator experience  (Hours)") + ggtitle("Simulator experience distribution")
+```
+
+```{r,echo=FALSE}
+## Gives count, mean, standard deviation, standard error of the mean, and confidence interval (default 95%).
+##   data: a data frame.
+##   measurevar: the name of a column that contains the variable to be summariezed
+##   groupvars: a vector containing names of columns that contain grouping variables
+##   na.rm: a boolean that indicates whether to ignore NA's
+##   conf.interval: the percent range of the confidence interval (default is 95%)
+summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
+                      conf.interval=.95, .drop=TRUE) {
+    library(plyr)
+
+    # New version of length which can handle NA's: if na.rm==T, don't count them
+    length2 <- function (x, na.rm=FALSE) {
+        if (na.rm) sum(!is.na(x))
+        else       length(x)
+    }
+
+    # This does the summary. For each group's data frame, return a vector with
+    # N, mean, and sd
+    datac <- ddply(data, groupvars, .drop=.drop,
+      .fun = function(xx, col) {
+        c(N    = length2(xx[[col]], na.rm=na.rm),
+          mean = mean   (xx[[col]], na.rm=na.rm),
+          sd   = sd     (xx[[col]], na.rm=na.rm)
+        )
+      },
+      measurevar
+    )
+
+    # Rename the "mean" column    
+    datac <- rename(datac, c("mean" = measurevar))
+
+    datac$se <- datac$sd / sqrt(datac$N)  # Calculate standard error of the mean
+
+    # Confidence interval multiplier for standard error
+    # Calculate t-statistic for confidence interval: 
+    # e.g., if conf.interval is .95, use .975 (above/below), and use df=N-1
+    ciMult <- qt(conf.interval/2 + .5, datac$N-1)
+    datac$ci <- datac$se * ciMult
+
+    return(datac)
+}
+pd <- position_dodge(0.1) # move them .05 to the left and right
+
 ```
 
 
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("Condition"))
+tgc
+```
+
 ```{r}
-BarSusCondition=ggplot(data=SartSusDemo, mapping=aes(x=SUS,fill = Gender))+(
-  geom_histogram(binwidth = 1, 
-                   col="black", 
-                   size=.1))
-BarSartCondition=ggplot(data=SartSusDemo, mapping=aes(x=SART,fill = Gender))+(
-  geom_histogram(binwidth = 1, 
-                   col="black", 
-                   size=.1))
-BarSusCondition
-BarSartCondition
+# Use 95% confidence interval instead of SEM
+ggplot(tgc, aes(x=Condition, y=SART, colour=Condition)) + 
+    geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Condition"))
+tgc
+```
+
+```{r}
+# Use 95% confidence interval instead of SEM
+ggplot(tgc, aes(x=Condition, y=SUS, colour=Condition)) + 
+    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Condition"))
+tgc
+```
+
+```{r}
+# Use 95% confidence interval instead of SEM
+ggplot(tgc, aes(x=Condition, y=SUS, colour=Condition)) + 
+    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
 ```
 ## Boxplots
 
