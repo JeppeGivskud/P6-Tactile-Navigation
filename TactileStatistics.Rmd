@@ -27,7 +27,10 @@ GenderCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Gende
 GenderCondition + geom_bar(col="black", size=.3)
 
 AgeCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Age,fill = Condition))
-AgeCondition + geom_bar(col="black", size=.3) + scale_y_discrete(name = "Count", limits=c(0,1,2,3,4,5,6,7,8,9,10)) 
+AgeCondition + geom_bar(col="black", size=.3) + scale_y_discrete(name = "Count", limits=factor(c(0,1,2,3,4,5,6,7,8,9,10))) +scale_x_continuous(breaks = c(20:34))
+
+#limits gør så man kan sætte hakker ved categoriske variabler (men kategorierne er numre haha)
+#breaks sætter hakker mellem 20 og 34 
 ```
 
 
