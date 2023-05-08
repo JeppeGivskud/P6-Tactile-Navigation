@@ -18,10 +18,20 @@ filename = "~/Downloads/A - SART&SUS&DEMOGRAPHICS.xlsx" #path for macbook downlo
 SartSusDemo <- read_excel(filename, sheet= "DataanalyseExport")
 
 ```
+## Introduction
+A study on driving performance and In Vehicle infotainment system has been done. The study aims two answer two questions.
+1) Can the addition of tactile navigation improve driving performance
+2) Which tactile navigation (if any) improves driving performance most
 
+The first part of this statistical analysis aims to investigate the sample to answer if the data is normally distributed and if the participants's characteristics are distributed across the four conditions. If this is not the case an effect of condition could be attributed to other personal factors of the participants (e.g. gaming experience).
+
+Independent variable: Condition (Acrylic, Bar, Combination & Touch only)
+
+Metrics: SUS, SART, Glance Time, Total Glances, Lane Breaks, Total Crash.
+
+Demographics: Gender, Age, Gaming experience, Driving experience, Simulator experience, Car games experience, Automatic gear expereience
 ## Population distribution
-
-```{r} 
+```{r, echo=FALSE} 
 #                         !!!LÆS DETTE FOR AT FORSTÅ!!!
 #Der bruges forskellige funktioner i disse plots. 
 #Den første funktion ggplot vælger data og x og y akser. Eksempelevis x=condition og så fylder den farve på efter gender.
@@ -32,30 +42,46 @@ SartSusDemo <- read_excel(filename, sheet= "DataanalyseExport")
 #scale_fill_discrete gør man kan ændre labels på legend med titel og konditioner
 #ggtitle ændrer titel
 #Siden titlerne er ændret skal man lige fjerne dem og se om der er byttet rundt på konditioner. Man kan nemlig godt kalde bar for acrylic og så bliver vi forvirret
-
-GenderCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Gender))
-GenderCondition + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:15)) + ggtitle("Gender distribution")
-
-AgeCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Age,fill = Condition))
-AgeCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_continuous(breaks = c(20:34)) + scale_fill_discrete(name = "Condition", labels = c("Acrylic", "Bar", "Combination","Touch only")) + ggtitle("Age distribution")
-
-ComputerCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = ComputerGames))
-ComputerCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Computer gaming (Hours)") + ggtitle("Gaming experience distribution")
-
-DrivingCondition <- ggplot(data=SartSusDemo, mapping=aes(x=YearDriversLicence,fill = Condition))
-DrivingCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_binned(n.breaks = 20) + scale_fill_discrete(name = "Condition", labels = c("Acrylic", "Bar", "Combination","Touch only")) + ggtitle("Drivers licence distribution")
-
-SimulatorExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Experience))
-SimulatorExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Car simulator experience") + ggtitle("Car simulator experience distribution")
-
-CarGamesCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarGames))
-CarGamesCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Car gaming (Hours)") + ggtitle("Car gaming experience distribution")
-
-SimulatorExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarSimulators))
-SimulatorExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Simulator experience  (Hours)") + ggtitle("Simulator experience distribution")
 ```
 
-```{r,echo=FALSE}
+```{r} 
+GenderCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Gender))
+GenderCondition <- GenderCondition + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:15)) + ggtitle("Gender distribution")
+
+AgeCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Age,fill = Condition))
+AgeCondition <- AgeCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_continuous(breaks = c(20:34)) + scale_fill_discrete(name = "Condition", labels = c("Acrylic", "Bar", "Combination","Touch only")) + ggtitle("Age distribution")
+
+ComputerCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = ComputerGames))
+ComputerCondition <- ComputerCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Computer gaming (Hours)") + ggtitle("Gaming experience distribution")
+
+DrivingCondition <- ggplot(data=SartSusDemo, mapping=aes(x=YearDriversLicence,fill = Condition))
+DrivingCondition <- DrivingCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_binned(n.breaks = 20) + scale_fill_discrete(name = "Condition", labels = c("Acrylic", "Bar", "Combination","Touch only")) + ggtitle("Drivers licence distribution")
+
+SimulatorYesNoExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = SimulatorExperience))
+SimulatorYesNoExperienceCondition <- SimulatorYesNoExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Car simulator experience") + ggtitle("Car simulator experience distribution")
+
+CarGamesCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarGames))
+CarGamesCondition <- CarGamesCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Car gaming (Hours)") + ggtitle("Car gaming experience distribution")
+
+CarSimulatorExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarSimulators))
+CarSimulatorExperienceCondition <- CarSimulatorExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Car simulator gaming (Hours)") + ggtitle("Car simulator gaming")
+
+AutomaticExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Automatic))
+AutomaticExperienceCondition <-AutomaticExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_x_discrete(labels=c("Acrylic","Bar","Combination","Touch only"))+scale_fill_discrete(name = "Automatic experience  (Y/N)") + ggtitle("Automatic experience distribution")
+
+GenderCondition
+AgeCondition
+ComputerCondition
+DrivingCondition
+SimulatorYesNoExperienceCondition
+CarGamesCondition
+AutomaticExperienceCondition
+CarSimulatorExperienceCondition
+```
+
+
+## PLOT OF MEANS
+```{r,echo=FALSE} 
 ## Gives count, mean, standard deviation, standard error of the mean, and confidence interval (default 95%).
 ##   data: a data frame.
 ##   measurevar: the name of a column that contains the variable to be summariezed
@@ -101,45 +127,598 @@ pd <- position_dodge(0.1) # move them .05 to the left and right
 
 ```
 
+## Shapiro - Wilk test
 
+
+## q-q plots
+```{r}
+Cond1 <- subset(SartSusDemo, SartSusDemo$Condition=='combination')
+Cond2 <- subset(SartSusDemo, SartSusDemo$Condition=='touch_only')
+Cond3 <- subset(SartSusDemo, SartSusDemo$Condition=='bar')
+Cond4 <- subset(SartSusDemo, SartSusDemo$Condition=='acrylic')
+
+  shapiro.test(Cond1$SUS)
+  shapiro.test(Cond2$SUS)
+  shapiro.test(Cond3$SUS)
+  shapiro.test(Cond4$SUS)
+  
+  shapiro.test(Cond1$SART)
+  shapiro.test(Cond2$SART)
+  shapiro.test(Cond3$SART)
+  shapiro.test(Cond4$SART)
+  
+  shapiro.test(Cond1$Total_Glance_time)
+  shapiro.test(Cond2$Total_Glance_time)
+  shapiro.test(Cond3$Total_Glance_time)
+  shapiro.test(Cond4$Total_Glance_time)
+  
+  shapiro.test(Cond1$Total_Glances)
+  shapiro.test(Cond2$Total_Glances)
+  shapiro.test(Cond3$Total_Glances)
+  shapiro.test(Cond4$Total_Glances)
+  
+  shapiro.test(Cond1$Lane_Breaks)
+  shapiro.test(Cond2$Lane_Breaks)
+  shapiro.test(Cond3$Lane_Breaks)
+  shapiro.test(Cond4$Lane_Breaks)
+  
+  shapiro.test(Cond1$Total_crash)
+  shapiro.test(Cond2$Total_crash)
+  shapiro.test(Cond3$Total_crash)
+  shapiro.test(Cond4$Total_crash)
+```
+
+The significantly not normally distributed metrics will be plottet with a qq plot to determnine how they are skewed
+```{r}
+library("car")
+qqPlot(Cond1$SUS) 
+# qqPlot(Cond2$SUS)
+# qqPlot(Cond3$SUS)
+# qqPlot(Cond4$SUS)
+
+# qqPlot(Cond1$SART)
+qqPlot(Cond2$SART)
+# qqPlot(Cond3$SART)
+# qqPlot(Cond4$SART)
+# 
+# qqPlot(Cond1$Total_Glance_time)
+# qqPlot(Cond2$Total_Glance_time)
+# qqPlot(Cond3$Total_Glance_time)
+# qqPlot(Cond4$Total_Glance_time)
+# 
+# qqPlot(Cond1$Total_Glances)
+qqPlot(Cond2$Total_Glances)
+# qqPlot(Cond3$Total_Glances)
+# qqPlot(Cond4$Total_Glances)
+# 
+# qqPlot(Cond1$Lane_Breaks)
+# qqPlot(Cond2$Lane_Breaks)
+qqPlot(Cond3$Lane_Breaks)
+# qqPlot(Cond4$Lane_Breaks)
+
+qqPlot(Cond1$Total_crash)
+qqPlot(Cond2$Total_crash)
+qqPlot(Cond3$Total_crash)
+qqPlot(Cond4$Total_crash)
+```
+
+```{r}
+library("car")
+qqPlot(SartSusDemo$SUS)
+qqPlot(SartSusDemo$SART)
+qqPlot(SartSusDemo$Total_Glance_time)
+qqPlot(SartSusDemo$Total_Glances)
+qqPlot(SartSusDemo$Total_crash)
+qqPlot(SartSusDemo$Lane_Breaks)
+```
+
+
+
+##Plot of means - All Dependent variables vs All Independent variables
+Dependent variables: SUS - SART - Total Crash - Lane Breaks - Total Glances - Total Glance Time
+Independent variables: Condition - Gender - Gaming - Drivers licence - Automatic gear - Car Simulator
+
+```{r}
+library(cowplot)
+dev.new(width=5,height=4,noRStudioGD = TRUE)
+
+SaveSixPlots <- function(Metric="NULL",filetype=".pdf"){
+    dir.create(Metric)
+    title1 <-paste(Metric, "-1-Condition",filetype, sep = "", collapse=NULL)
+    title2 <-paste(Metric, "-2-Gender",filetype, sep = "", collapse=NULL)
+    title3 <-paste(Metric, "-3-ComputerGames",filetype, sep = "", collapse=NULL)
+    title4 <-paste(Metric, "-4-YearsDriversLicence",filetype, sep = "", collapse=NULL)
+    title5 <-paste(Metric, "-5-SimulatorExperience",filetype, sep = "", collapse=NULL)
+    title6 <-paste(Metric, "-6-Automatic",filetype, sep = "", collapse=NULL)
+  
+    ggsave(filename=title1,plot=plot1, path = Metric)
+    ggsave(filename=title2,plot=plot2, path = Metric)
+    ggsave(filename=title3,plot=plot3, path = Metric)
+    ggsave(filename=title4,plot=plot4, path = Metric)
+    ggsave(filename=title5,plot=plot5, path = Metric)
+    ggsave(filename=title6,plot=plot6, path = Metric)
+    
+    plot1
+    plot2
+    plot3
+    plot4
+    plot5
+    plot6
+}
+
+```
+
+###Sammenhæng SART og SUS
+```{r,echo=FALSE}
+SARTSUS <- lm(SUS ~ SART, data = SartSusDemo)
+summary(SARTSUS)
+ggplot(SartSusDemo,aes(SART, SUS)) +
+  geom_point() +
+  geom_smooth(method='lm')
+```
+
+
+###SUS
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Condition"))
+tgc
+```
+```{r,echo=FALSE}
+# Use 95% confidence interval instead of SEM
+plot1 <- ggplot(tgc, aes(x=Condition, y=SUS, colour=Condition)) + 
+    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Gender"))
+tgc
+```
+```{r ,echo=FALSE}
+# Use 95% confidence interval instead of SEM
+plot2 <- ggplot(tgc, aes(x=Gender, y=SUS, colour=Gender)) + 
+    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+
+
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("ComputerGames"))
+tgc
+```
+```{r,echo=FALSE}
+# Use 95% confidence interval instead of SEM
+plot3 <-ggplot(tgc, aes(x=ComputerGames, y=SUS, colour=ComputerGames)) + 
+    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("YearDriversLicence"))
+tgc
+```
+```{r,echo=FALSE}
+#Use 95% confidence interval instead of SEM
+plot4 <- ggplot(tgc, aes(x=YearDriversLicence, y=SUS, colour=YearDriversLicence)) + 
+     geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+     geom_line(position=pd) +
+      geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("SimulatorExperience"))
+tgc
+```
+```{r,echo=FALSE}
+# Use 95% confidence interval instead of SEM
+plot5 <-ggplot(tgc, aes(x=SimulatorExperience, y=SUS, colour=SimulatorExperience)) + 
+    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Automatic"))
+tgc
+```
+```{r,echo=FALSE}
+# Use 95% confidence interval instead of SEM
+plot6 <-ggplot(tgc, aes(x=Automatic, y=SUS, colour=Automatic)) + 
+    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r}
+  SaveSixPlots("SUS")
+```
+
+
+###Sart
 ```{r,echo=FALSE}
 tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("Condition"))
 tgc
 ```
-
 ```{r}
 # Use 95% confidence interval instead of SEM
-ggplot(tgc, aes(x=Condition, y=SART, colour=Condition)) + 
+plot1 <- ggplot(tgc, aes(x=Condition, y=SART, colour=Condition)) + 
     geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
 ```
 
 ```{r,echo=FALSE}
-tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Condition"))
+tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("Gender"))
 tgc
 ```
-
 ```{r}
 # Use 95% confidence interval instead of SEM
-ggplot(tgc, aes(x=Condition, y=SUS, colour=Condition)) + 
-    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+plot2 <- ggplot(tgc, aes(x=Gender, y=SART, colour=Gender)) + 
+    geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
 ```
 
 ```{r,echo=FALSE}
-tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Condition"))
+tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("ComputerGames"))
 tgc
 ```
-
 ```{r}
 # Use 95% confidence interval instead of SEM
-ggplot(tgc, aes(x=Condition, y=SUS, colour=Condition)) + 
-    geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
+plot3 <- ggplot(tgc, aes(x=ComputerGames, y=SART, colour=ComputerGames)) + 
+    geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
 ```
+
+```{r,echo=FALSE}
+  tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("YearDriversLicence"))
+  tgc
+```
+```{r}
+  #Use 95% confidence interval instead of SEM
+  plot4 <- ggplot(tgc, aes(x=YearDriversLicence, y=SART, colour=YearDriversLicence)) + 
+      geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
+      geom_line(position=pd) +
+      geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("SimulatorExperience"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot5 <- ggplot(tgc, aes(x=SimulatorExperience, y=SART, colour=SimulatorExperience)) + 
+    geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("Automatic"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot6 <- ggplot(tgc, aes(x=Automatic, y=SART, colour=Automatic)) + 
+    geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+```{r}
+  SaveSixPlots("SART")
+```
+###Total crash
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_crash", groupvars=c("Condition"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot1 <- ggplot(tgc, aes(x=Condition, y=Total_crash, colour=Condition)) + 
+    geom_errorbar(aes(ymin=Total_crash-ci, ymax=Total_crash+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_crash", groupvars=c("Gender"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot2 <- ggplot(tgc, aes(x=Gender, y=Total_crash, colour=Gender)) + 
+    geom_errorbar(aes(ymin=Total_crash-ci, ymax=Total_crash+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_crash", groupvars=c("ComputerGames"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot3 <- ggplot(tgc, aes(x=ComputerGames, y=Total_crash, colour=ComputerGames)) + 
+    geom_errorbar(aes(ymin=Total_crash-ci, ymax=Total_crash+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+  tgc <- summarySE(SartSusDemo, measurevar="Total_crash", groupvars=c("YearDriversLicence"))
+  tgc
+```
+```{r}
+  #Use 95% confidence interval instead of SEM
+  plot4 <- ggplot(tgc, aes(x=YearDriversLicence, y=Total_crash, colour=YearDriversLicence)) + 
+      geom_errorbar(aes(ymin=Total_crash-ci, ymax=Total_crash+ci), width=.1, position=pd) +
+      geom_line(position=pd) +
+      geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_crash", groupvars=c("SimulatorExperience"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot5 <- ggplot(tgc, aes(x=SimulatorExperience, y=Total_crash, colour=SimulatorExperience)) + 
+    geom_errorbar(aes(ymin=Total_crash-ci, ymax=Total_crash+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_crash", groupvars=c("Automatic"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot6 <- ggplot(tgc, aes(x=Automatic, y=Total_crash, colour=Automatic)) + 
+    geom_errorbar(aes(ymin=Total_crash-ci, ymax=Total_crash+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+```{r}
+  SaveSixPlots("Total_crash")
+```
+
+###Lane Breaks
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Lane_Breaks", groupvars=c("Condition"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot1 <- ggplot(tgc, aes(x=Condition, y=Lane_Breaks, colour=Condition)) + 
+    geom_errorbar(aes(ymin=Lane_Breaks-ci, ymax=Lane_Breaks+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Lane_Breaks", groupvars=c("Gender"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot2 <- ggplot(tgc, aes(x=Gender, y=Lane_Breaks, colour=Gender)) + 
+    geom_errorbar(aes(ymin=Lane_Breaks-ci, ymax=Lane_Breaks+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Lane_Breaks", groupvars=c("ComputerGames"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot3 <- ggplot(tgc, aes(x=ComputerGames, y=Lane_Breaks, colour=ComputerGames)) + 
+    geom_errorbar(aes(ymin=Lane_Breaks-ci, ymax=Lane_Breaks+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+  tgc <- summarySE(SartSusDemo, measurevar="Lane_Breaks", groupvars=c("YearDriversLicence"))
+  tgc
+```
+```{r}
+  #Use 95% confidence interval instead of SEM
+  plot4 <- ggplot(tgc, aes(x=YearDriversLicence, y=Lane_Breaks, colour=YearDriversLicence)) + 
+      geom_errorbar(aes(ymin=Lane_Breaks-ci, ymax=Lane_Breaks+ci), width=.1, position=pd) +
+      geom_line(position=pd) +
+      geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Lane_Breaks", groupvars=c("SimulatorExperience"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot5<- ggplot(tgc, aes(x=SimulatorExperience, y=Lane_Breaks, colour=SimulatorExperience)) + 
+    geom_errorbar(aes(ymin=Lane_Breaks-ci, ymax=Lane_Breaks+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Lane_Breaks", groupvars=c("Automatic"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot6<- ggplot(tgc, aes(x=Automatic, y=Lane_Breaks, colour=Automatic)) + 
+    geom_errorbar(aes(ymin=Lane_Breaks-ci, ymax=Lane_Breaks+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+```{r}
+  SaveSixPlots("Lane_Breaks")
+```
+
+###Total Glances
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glances", groupvars=c("Condition"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot1<- ggplot(tgc, aes(x=Condition, y=Total_Glances, colour=Condition)) + 
+    geom_errorbar(aes(ymin=Total_Glances-ci, ymax=Total_Glances+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glances", groupvars=c("Gender"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot2<- ggplot(tgc, aes(x=Gender, y=Total_Glances, colour=Gender)) + 
+    geom_errorbar(aes(ymin=Total_Glances-ci, ymax=Total_Glances+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glances", groupvars=c("ComputerGames"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot3<- ggplot(tgc, aes(x=ComputerGames, y=Total_Glances, colour=ComputerGames)) + 
+    geom_errorbar(aes(ymin=Total_Glances-ci, ymax=Total_Glances+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+  tgc <- summarySE(SartSusDemo, measurevar="Total_Glances", groupvars=c("YearDriversLicence"))
+  tgc
+```
+```{r}
+  #Use 95% confidence interval instead of SEM
+  plot4<- ggplot(tgc, aes(x=YearDriversLicence, y=Total_Glances, colour=YearDriversLicence)) + 
+      geom_errorbar(aes(ymin=Total_Glances-ci, ymax=Total_Glances+ci), width=.1, position=pd) +
+      geom_line(position=pd) +
+      geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glances", groupvars=c("SimulatorExperience"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot5<- ggplot(tgc, aes(x=SimulatorExperience, y=Total_Glances, colour=SimulatorExperience)) + 
+    geom_errorbar(aes(ymin=Total_Glances-ci, ymax=Total_Glances+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glances", groupvars=c("Automatic"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot6<- ggplot(tgc, aes(x=Automatic, y=Total_Glances, colour=Automatic)) + 
+    geom_errorbar(aes(ymin=Total_Glances-ci, ymax=Total_Glances+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r}
+  SaveSixPlots("Total_Glances")
+```
+###Total Glance time 
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glance_time", groupvars=c("Condition"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot1<- ggplot(tgc, aes(x=Condition, y=Total_Glance_time, colour=Condition)) + 
+    geom_errorbar(aes(ymin=Total_Glance_time-ci, ymax=Total_Glance_time+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glance_time", groupvars=c("Gender"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot2<- ggplot(tgc, aes(x=Gender, y=Total_Glance_time, colour=Gender)) + 
+    geom_errorbar(aes(ymin=Total_Glance_time-ci, ymax=Total_Glance_time+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glance_time", groupvars=c("ComputerGames"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot3<- ggplot(tgc, aes(x=ComputerGames, y=Total_Glance_time, colour=ComputerGames)) + 
+    geom_errorbar(aes(ymin=Total_Glance_time-ci, ymax=Total_Glance_time+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+  tgc <- summarySE(SartSusDemo, measurevar="Total_Glance_time", groupvars=c("YearDriversLicence"))
+  tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+  plot4<- ggplot(tgc, aes(x=YearDriversLicence, y=Total_Glance_time, colour=YearDriversLicence)) + 
+      geom_errorbar(aes(ymin=Total_Glance_time-ci, ymax=Total_Glance_time+ci), width=.1, position=pd) +
+      geom_line(position=pd) +
+      geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glance_time", groupvars=c("SimulatorExperience"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot5<- ggplot(tgc, aes(x=SimulatorExperience, y=Total_Glance_time, colour=SimulatorExperience)) + 
+    geom_errorbar(aes(ymin=Total_Glance_time-ci, ymax=Total_Glance_time+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r,echo=FALSE}
+tgc <- summarySE(SartSusDemo, measurevar="Total_Glance_time", groupvars=c("Automatic"))
+tgc
+```
+```{r}
+# Use 95% confidence interval instead of SEM
+plot6<- ggplot(tgc, aes(x=Automatic, y=Total_Glance_time, colour=Automatic)) + 
+    geom_errorbar(aes(ymin=Total_Glance_time-ci, ymax=Total_Glance_time+ci), width=.1, position=pd) +
+    geom_line(position=pd) +
+    geom_point(position=pd)
+```
+
+```{r}
+  SaveSixPlots("Total_Glance_Time")
+```
+
+
 ## Boxplots
 
 ```{r}
@@ -159,8 +738,6 @@ SusComputerGames
 SartComputerGames
 ```
 
-
-
 ##T-tests
 ```{r}
 Combi <- SartSusDemo[which(SartSusDemo$Condition=='combination'),]
@@ -175,8 +752,8 @@ select=c(Participants, SUS,Condition))
 TSusCondition = t.test(formula = SUS ~ Condition, data = CombiTouch)
 TSusCondition
 
-#one.way <- aov(SUS ~ Condition, data = SartSusDemo)
-#summary(one.way)
+one.way <- aov(SUS ~ Condition, data = SartSusDemo)
+summary(one.way)
 
 ```
 
