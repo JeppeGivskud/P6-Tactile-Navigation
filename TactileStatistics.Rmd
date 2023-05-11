@@ -18,9 +18,9 @@ library(plyr)
 library(cowplot)
 library("car")
 library(car)
-#library(ggpubr)
-#library(tidyverse)
-#library(broom)
+library(ggpubr)
+library(tidyverse)
+library(broom)
 library(rstatix)
 library(datarium)
 library(readr)
@@ -345,91 +345,76 @@ ANOVA has Three assumptions
 3) Independence  
 The assumption of Independence is meet as our participants haven't influence each other in any way we know of. The participants were instructed not to speak with each other between trials and we can hope they have met this instruction.
 
+## Statistical analysis
+Statistics will be run on all driving performance metrics grouped by conditions, to look for significant main effects.
+The normality and the variance will be analysed to ensure the correct statistical test is being used.
+Sharpiro Wilk test will be used to analyse the distribution of the residuals.
+Bartlett's test will be used in case of normality to analyse the variance
+Levenes test will be used in case the residuals are not normal distributed to analyse the variance
 
-### Test of normality - Condition/metric
+### Analysis of Glance Time grouped by conditions
+The residuals proved to be normally distributed and the data has homogene variance which means a standard ANOVA test can be used
 ```{r}
-Cond1 <- subset(dataFrame, dataFrame$Condition == "Combination")
-Cond2 <- subset(dataFrame, dataFrame$Condition == "Touch_only")
-Cond3 <- subset(dataFrame, dataFrame$Condition == "Bar")
-Cond4 <- subset(dataFrame, dataFrame$Condition == "Acrylic")
+glanceTimeData <- subset(dataFrame, select = c("Participants", "Condition", "TotalGlanceTime"))
+summary(glanceTimeData)
+get_summary_stats(glanceTimeData)
 
-shapiro.test(Cond1$SUS)
-shapiro.test(Cond2$SUS)
-shapiro.test(Cond3$SUS)
-shapiro.test(Cond4$SUS)
+glanceTimeData %>%
+    group_by(Condition) %>%
+    identify_outliers(TotalGlanceTime)
 
-shapiro.test(Cond1$SART)
-shapiro.test(Cond2$SART)
-shapiro.test(Cond3$SART)
-shapiro.test(Cond4$SART)
+glanceTimeModel <- lm(TotalGlanceTime ~ Condition, data = glanceTimeData)
+ggqqplot(residuals(glanceTimeModel))
+shapiro_test(residuals(glanceTimeModel))
 
-shapiro.test(Cond1$TotalGlanceTime)
-shapiro.test(Cond2$TotalGlanceTime)
-shapiro.test(Cond3$TotalGlanceTime)
-shapiro.test(Cond4$TotalGlanceTime)
+# We use a bartlett test as the residuals are normally distributed
+bartlett.test(TotalGlanceTime ~ Condition, data = glanceTimeData)
 
-shapiro.test(Cond1$TotalGlances)
-shapiro.test(Cond2$TotalGlances)
-shapiro.test(Cond3$TotalGlances)
-shapiro.test(Cond4$TotalGlances)
-
-shapiro.test(Cond1$LaneBreaks)
-shapiro.test(Cond2$LaneBreaks)
-shapiro.test(Cond3$LaneBreaks)
-shapiro.test(Cond4$LaneBreaks)
-
-shapiro.test(Cond1$TotalCrash)
-shapiro.test(Cond2$TotalCrash)
-shapiro.test(Cond3$TotalCrash)
-shapiro.test(Cond4$TotalCrash)
-```
-### qqplots of the not normally distributed
-
-There are 8 scores which break normality  
-Condition 1 - SUS  (0.001505)  
-Condition 2 - SART (0.02632)  
-Condition 2 - Total Glances (0.03561)  
-Condition 3 - Lane breaks (0.03216)
-
-Condition 1 - Total Crash (0.0001052)  
-Condition 2 - Total Crash (0.0001063)  
-Condition 3 - Total Crash (0.002371)  
-Condition 4 - Total Crash (0.0001063)  
-
-```{r,echo=FALSE}
-# The significantly not normally distributed metrics will be plottet with a qq plot to determnine how they are skewed
-q1 <- qqPlot(Cond1$SUS)
-# qqPlot(Cond2$SUS)
-# qqPlot(Cond3$SUS)
-# qqPlot(Cond4$SUS)
-
-# qqPlot(Cond1$SART)
-q2 <- qqPlot(Cond2$SART)
-# qqPlot(Cond3$SART)
-# qqPlot(Cond4$SART)
-#
-# qqPlot(Cond1$TotalGlanceTime)
-# qqPlot(Cond2$TotalGlanceTime)
-# qqPlot(Cond3$TotalGlanceTime)
-# qqPlot(Cond4$TotalGlanceTime)
-#
-# qqPlot(Cond1$TotalGlances)
-q3 <- qqPlot(Cond2$TotalGlances)
-# qqPlot(Cond3$TotalGlances)
-# qqPlot(Cond4$TotalGlances)
-#
-# qqPlot(Cond1$LaneBreaks)
-# qqPlot(Cond2$LaneBreaks)
-q4 <- qqPlot(Cond3$LaneBreaks)
-# qqPlot(Cond4$LaneBreaks)
-
-q5 <- qqPlot(Cond1$TotalCrash)
-q6 <- qqPlot(Cond2$TotalCrash)
-q7 <- qqPlot(Cond3$TotalCrash)
-q8 <- qqPlot(Cond4$TotalCrash)
+glanceTimeTest <- glanceTimeData %>% anova_test(TotalGlanceTime ~ Condition)
+glanceTimeTest
 ```
 
-### Rethink crash data
+### Analysis of Glance Count grouped by conditions
+```{r}
+glanceCountData <- subset(dataFrame, select = c("Participants", "Condition", "TotalGlances"))
+summary(glanceCountData)
+get_summary_stats(glanceCountData)
+
+glanceCountData %>%
+    group_by(Condition) %>%
+    identify_outliers(TotalGlances)
+
+glanceCountModel <- lm(TotalGlances ~ Condition, data = glanceCountData)
+ggqqplot(residuals(glanceCountModel))
+shapiro_test(residuals(glanceCountModel))
+
+bartlett.test(TotalGlances ~ Condition, data = glanceCountData)
+
+glanceCountTest <- glanceCountData %>% anova_test(TotalGlances ~ Condition)
+glanceCountTest
+```
+
+### Analysis of Crash Count grouped by condition
+```{r}
+crashData <- subset(dataFrame, select = c("Participants", "Condition", "TotalCrash"))
+summary(crashData)
+get_summary_stats(crashData)
+
+crashData %>%
+    group_by(Condition) %>%
+    identify_outliers(TotalCrash)
+
+crashDataModel <- lm(TotalCrash ~ Condition, data = crashData)
+ggqqplot(residuals(crashDataModel))
+shapiro_test(residuals(crashDataModel))
+
+crashData %>% levene_test(TotalCrash ~ Condition)
+
+crashDataTest <- crashData %>% kruskal_test(TotalCrash ~ Condition)
+crashDataTest
+```
+
+#### Crash Count visualization
 Another way to present the crash data would be to score crashes pr condition:
 ```{r,echo=FALSE}
 TotalCrash <- ggplot(data = dataFrame, mapping = aes(x = Condition, y = TotalCrash, fill = Condition))
@@ -440,26 +425,67 @@ TotalCrash + scale_fill_brewer(palette = Palette)
 ```
 It can be seen on this graph that each condition has about the same total crashes and some conditions have one or two participants responsible for extra crashes.  
 
-### Test of homogeneity - Condition/metric
-To test for homogeneity we'll use Levines test for the scores which aren't normally distributed and Bartletts test for the scores which are normally distributed.  
-```{r,echo=FALSE}
-SusVariance <- leveneTest(SUS ~ Condition, dataFrame)
-SartVariance <- leveneTest(SART ~ Condition, dataFrame)
-GlancesVariance <- leveneTest(TotalGlances ~ Condition, dataFrame)
-# GlanceTimevariance = leveneTest(TotalGlanceTime ~ Condition, dataFrame)
-Crashvariance <- leveneTest(TotalCrash ~ Condition, dataFrame)
-LaneBreaksvariance <- leveneTest(LaneBreaks ~ Condition, dataFrame)
+### Analysis of Lane Breaks grouped by condition
+```{r}
+laneData <- subset(dataFrame, select = c("Participants", "Condition", "LaneBreaks"))
+summary(laneData)
+get_summary_stats(laneData)
 
-GlanceTimevariance <- bartlett.test(TotalGlanceTime ~ Condition, data = dataFrame)
+laneData %>%
+    group_by(Condition) %>%
+    identify_outliers(LaneBreaks)
 
-SusVariance
-SartVariance
-GlancesVariance
-GlanceTimevariance
-Crashvariance
-LaneBreaksvariance
+laneDataModel <- lm(LaneBreaks ~ Condition, data = laneData)
+ggqqplot(residuals(laneDataModel))
+shapiro_test(residuals(laneDataModel))
+
+laneData %>% levene_test(LaneBreaks ~ Condition)
+
+laneDataTest <- laneData %>% kruskal_test(LaneBreaks ~ Condition)
+laneDataTest
 ```
-We see that the variance in metrics across the four conditions are not significantly different.
+
+### Analysis of SUS grouped by condition
+```{r}
+susData <- subset(dataFrame, select = c("Participants", "Condition", "SUS"))
+summary(susData)
+get_summary_stats(susData)
+
+susData %>%
+    group_by(Condition) %>%
+    identify_outliers(SUS)
+
+susDataModel <- lm(SUS ~ Condition, data = susData)
+ggqqplot(residuals(susDataModel))
+shapiro_test(residuals(susDataModel))
+
+susData %>% levene_test(SUS ~ Condition)
+
+susDataTest <- susData %>% kruskal_test(SUS ~ Condition)
+susDataTest
+```
+
+### Analysis of SART grouped by condition
+```{r}
+sartData <- subset(dataFrame, select = c("Participants", "Condition", "SART"))
+sartData <- sartData[!(sartData$Participants == "P12" | sartData$Participants == "P13" | sartData$Participants == "P29" | sartData$Participants == "P30"), ]
+summary(sartData)
+get_summary_stats(sartData)
+
+sartData %>%
+    group_by(Condition) %>%
+    identify_outliers(SART)
+
+sartDataModel <- lm(SART ~ Condition, data = sartData)
+ggqqplot(residuals(sartDataModel))
+shapiro_test(residuals(sartDataModel))
+
+bartlett.test(SART ~ Condition, data = sartData)
+
+sartDataTest <- sartData %>% anova_test(SART ~ Condition)
+sartDataTest
+```
+
 ### Distribution of metrics (Bar and density)
 - SUS  
 - SART  
@@ -468,7 +494,7 @@ We see that the variance in metrics across the four conditions are not significa
 - Total Glances  
 - Total Glance Time  
 
-#### Bar
+#### Bar Charts
 ```{r}
 SUSTotal <- ggplot(data = dataFrame, mapping = aes(x = SUS, fill = Condition))
 SUSTotal <- SUSTotal + geom_bar(col = "black", size = .3) + scale_y_continuous(name = "Count", breaks = c(0:150)) + ggtitle("SUSTotal distribution") + scale_fill_brewer(palette = Palette)
@@ -527,62 +553,6 @@ GlanceTimeTotal <- GlanceTimeTotal + geom_density() + ggtitle("SUGlanceTimeTotal
 ggplot(dataFrame, aes(x = TotalGlances, y = TotalGlanceTime, color = Condition)) +
     geom_point(size = 2, shape = 23) +
     geom_smooth(method = lm, se = FALSE)
-```
-
-### Test significance
-We now have two options  
-1) Compute an ANOVA because it is said to be somewhat robust against violations of normal distribution  
-2) Compute a Welsh ANOVA (it is robust against normal distribution but not unequal variance (heteroscedastic))   
-3) Compute a Kruskal-Wallis test - as our data has equal varience (homoscedasticity) but is not normally distributed  
-
-We will choose option 3) and compute the Kruskal-Wallis test
-
-Note: Total Glance Time is both normally distributed and has homoscedasticity and therefore an anova can be computed
-
-```{r}
-SUS <- kruskal.test(SUS ~ Condition, data = dataFrame)
-SART <- kruskal.test(SART ~ Condition, data = dataFrame)
-Glances <- kruskal.test(TotalGlances ~ Condition, data = dataFrame)
-Crashes <- kruskal.test(TotalCrash ~ Condition, data = dataFrame)
-LaneBreaks <- kruskal.test(LaneBreaks ~ Condition, data = dataFrame)
-GlanceTime <- aov(TotalGlanceTime ~ Condition, data = dataFrame, var.equal = TRUE)
-
-# fuckery
-SUSanova <- aov(SUS ~ Condition, data = dataFrame)
-qqPlot(resid(SUSanova))
-qqPlot(resid(GlanceTime))
-
-SUS
-SART
-Glances
-Crashes
-LaneBreaks
-summary(GlanceTime)
-```
-None of the 6 metrics have significant differences between conditions
-
-
-### General metrics qqplot
-To examine if the general metrics are normally distributed qqplots have been made for them.
-
-```{r,echo=FALSE}
-qqPlot(dataFrame$SUS)
-shapiro.test(dataFrame$SUS)
-
-qqPlot(dataFrame$SART)
-shapiro.test(dataFrame$SART)
-
-qqPlot(dataFrame$TotalGlanceTime)
-shapiro.test(dataFrame$TotalGlanceTime)
-
-qqPlot(dataFrame$TotalGlances)
-shapiro.test(dataFrame$TotalGlances)
-
-qqPlot(dataFrame$TotalCrash)
-shapiro.test(dataFrame$TotalCrash)
-
-qqPlot(dataFrame$LaneBreaks)
-shapiro.test(dataFrame$LaneBreaks)
 ```
 
 <!-- ### Sammenhæng SART og SUS -->
