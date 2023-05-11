@@ -18,9 +18,9 @@ library(plyr)
 library(cowplot)
 library("car")
 library(car)
-library(ggpubr)
-library(tidyverse)
-library(broom)
+#library(ggpubr)
+#library(tidyverse)
+#library(broom)
 library(rstatix)
 library(datarium)
 library(readr)
@@ -348,10 +348,10 @@ The assumption of Independence is meet as our participants haven't influence eac
 
 ### Test of normality - Condition/metric
 ```{r}
-Cond1 <- subset(dataFrame, dataFrame$Condition == "combination")
-Cond2 <- subset(dataFrame, dataFrame$Condition == "touch_only")
-Cond3 <- subset(dataFrame, dataFrame$Condition == "bar")
-Cond4 <- subset(dataFrame, dataFrame$Condition == "acrylic")
+Cond1 <- subset(dataFrame, dataFrame$Condition == "Combination")
+Cond2 <- subset(dataFrame, dataFrame$Condition == "Touch_only")
+Cond3 <- subset(dataFrame, dataFrame$Condition == "Bar")
+Cond4 <- subset(dataFrame, dataFrame$Condition == "Scrylic")
 
 shapiro.test(Cond1$SUS)
 shapiro.test(Cond2$SUS)
