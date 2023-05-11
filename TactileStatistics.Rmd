@@ -23,11 +23,10 @@ library(tidyverse)
 library(broom)
 library(rstatix)
 library(datarium)
-
+library(readr)
 # import data
-setwd("C:/Users/clyho/OneDrive - Aalborg Universitet/Desktop/Shid/Databehandling")
-dataFrame <- read.csv("Datasheet_last_rows.csv", header = TRUE, stringsAsFactors = TRUE)
-
+urlfile <- "https://raw.githubusercontent.com/JeppeGivskud/P6-Tactile-Navigation/main/Datasheet_last_rows.csv"
+dataFrame <- read_csv(url(urlfile), show_col_types = FALSE)
 # Farven på alle plots er defineret ud fra palette
 Palette <- "Set1"
 ```
