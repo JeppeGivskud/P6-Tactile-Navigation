@@ -24,9 +24,11 @@ library(broom)
 library(rstatix)
 library(datarium)
 library(readr)
+
 # import data
 urlfile <- "https://raw.githubusercontent.com/JeppeGivskud/P6-Tactile-Navigation/main/Datasheet_last_rows.csv"
-dataFrame <- read_csv(url(urlfile), show_col_types = FALSE)
+dataFrame <- read.csv(url(urlfile), header = TRUE, stringsAsFactors = TRUE)
+
 # Farven på alle plots er defineret ud fra palette
 Palette <- "Set1"
 ```
@@ -336,10 +338,10 @@ The assumption of Independence is meet as our participants haven't influence eac
 
 ### Test of normality - Condition/metric
 ```{r}
-Cond1 <- subset(dataFrame, dataFrame$Condition == "Combination")
-Cond2 <- subset(dataFrame, dataFrame$Condition == "Touch_only")
-Cond3 <- subset(dataFrame, dataFrame$Condition == "Bar")
-Cond4 <- subset(dataFrame, dataFrame$Condition == "Acrylic")
+Cond1 <- subset(dataFrame, dataFrame$Condition == "combination")
+Cond2 <- subset(dataFrame, dataFrame$Condition == "touch_only")
+Cond3 <- subset(dataFrame, dataFrame$Condition == "bar")
+Cond4 <- subset(dataFrame, dataFrame$Condition == "acrylic")
 
 shapiro.test(Cond1$SUS)
 shapiro.test(Cond2$SUS)

@@ -1,45 +1,45 @@
 Participants,Age,Gender,Occupation,DriversLicence,YearDriversLicence,CarGamesPlayed,SimulatorExperience,ComputerGames,CarGames,CarSimulators,Automatic,SART,SUS,Condition,TotalGlanceTime,TotalGlances,TotalCrash,LaneBreaks,UseOfAid,UseOfReference
-P1,21,M,Student,1. 10,"1,833,333,333",ETS2,Yes,0-2,0-2,0-2,No,15,85,combination,60.01,63,0,6,0,0
+P1,21,M,Student,1. 10,1.833333333,ETS2,Yes,0-2,0-2,0-2,No,15,85,combination,60.01,63,0,6,0,0
 P2,23,M,Student,4. 0,4,,No,0-2,0-2,0-2,Yes,14,80,combination,39.56,63,1,6,0,0
-P3,21,F,Student,3. 5,"4,416,666,667",,No,5-Mar,0-2,0-2,Yes,8,75,touch_only,59.16,52,0,9,0,3
+P3,21,F,Student,3. 5,3.416666667,,No,5-Mar,0-2,0-2,Yes,8,75,touch_only,59.16,52,0,9,0,3
 P4,22,M,Student,4. 0,4,Assetto Corsa Competizione. Forza Horizon 4 & 5,Yes,5-Mar,0-2,0-2,Yes,15,60,touch_only,22.53,38,0,0,0,0
 P5,22,M,Student,4. 6,4.5,Trackmania,No,5+,0-2,0-2,Yes,17,92.5,touch_only,34.22,48,0,2,0,2
-P6,21,M,Student,3. 5,"3,416,666,667",,No,5-Mar,0-2,0-2,No,12,90,combination,55.23,80,0,2,0,1
+P6,21,M,Student,3. 5,3.416666667,,No,5-Mar,0-2,0-2,No,12,90,combination,55.23,80,0,2,0,1
 P7,22,M,Student,2. 0,2,,Yes,5+,0-2,0-2,Yes,20,90,combination,32.5,48,0,0,0,0
-P8,20,M,Student,2. 8,"2,666,666,667",,No,5-Mar,0-2,0-2,Yes,17,90,touch_only,41.51,50,1,6,0,0
-P9,21,M,Student,4. 8,"4,666,666,667",,Yes,0-2,0-2,0-2,Yes,15,80,touch_only,23.96,32,0,2,0,0
-P10,21,M,Student,4. 5,"4,416,666,667",,No,5-Mar,0-2,0-2,Yes,14,80,touch_only,41.89,39,1,3,0,1
+P8,20,M,Student,2. 8,2.666666667,,No,5-Mar,0-2,0-2,Yes,17,90,touch_only,41.51,50,1,6,0,0
+P9,21,M,Student,4. 8,4.666666667,,Yes,0-2,0-2,0-2,Yes,15,80,touch_only,23.96,32,0,2,0,0
+P10,21,M,Student,4. 5,4.416666667,,No,5-Mar,0-2,0-2,Yes,14,80,touch_only,41.89,39,1,3,0,1
 P11,34,F,Student,16. 0,16,,No,0-2,0-2,0-2,No,12,85,combination,42.23,49,1,9,1,0
-P12,23,M,Software developer,6. 1,"6,083,333,333",,No,0-2,0-2,0-2,Yes,17,87.5,combination,25.86,31,0,6,1,0
-P13,25,M,Student,6. 8,"6,666,666,667",GTA5,No,5+,0-2,0-2,No,18,47.5,touch_only,38.1,50,0,5,0,0
+P12,23,M,Software developer,6. 1,6.083333333,,No,0-2,0-2,0-2,Yes,17,87.5,combination,25.86,31,0,6,1,0
+P13,25,M,Student,6. 8,6.666666667,GTA5,No,5+,0-2,0-2,No,18,47.5,touch_only,38.1,50,0,5,0,0
 P14,22,M,Student,4. 0,4,,No,5-Mar,0-2,0-2,Yes,15,82.5,combination,39.03,66,1,3,1,0
-P15,25,M,Student,5. 5,"5,416,666,667",,No,5-Mar,0-2,0-2,Yes,10,65,combination,30.76,41,0,3,1,0
+P15,25,M,Student,5. 5,5.416666667,,No,5-Mar,0-2,0-2,Yes,10,65,combination,30.76,41,0,3,1,0
 P16,24,M,Student,2. 0,2,,No,5+,0-2,0-2,No,18,82.5,touch_only,44.51,52,0,5,0,0
-P17,21,M,Student,2. 5,"2,416,666,667",,No,0-2,0-2,0-2,No,4,57.5,touch_only,39.85,38,3,6,0,0
+P17,21,M,Student,2. 5,2.416666667,,No,0-2,0-2,0-2,No,4,57.5,touch_only,39.85,38,3,6,0,0
 P18,22,F,Student,4. 6,4.5,,No,0-2,0-2,0-2,No,16,75,touch_only,44.03,52,1,4,0,4
 P19,21,F,Student,4. 0,4,,No,0-2,0-2,0-2,No,10,87.5,combination,28.89,59,1,3,4,1
 P20,23,M,Student,5. 0,5,Need for Speed 2015,No,5-Mar,0-2,0-2,Yes,21,82.5,combination,36.47,44,0,1,0,0
 P22,21,M,Student,4. 3,4.25,,No,0-2,0-2,0-2,Yes,13,85,bar,39.58,54,0,7,0,0
-P23,28,M,Student,10. 2,"1,016,666,667",,No,0-2,0-2,0-2,No,14,90,acrylic,45.49,64,2,5,0,0
+P23,28,M,Student,10. 2,10.16666667,,No,0-2,0-2,0-2,No,14,90,acrylic,45.49,64,2,5,0,0
 P24,27,M,Student,9. 0,9,Rocket league. Dirt rally,Yes,5-Mar,5-Mar,0-2,Yes,9,70,acrylic,28.22,45,0,0,4,2
 P25,23,F,Student,6. 0,6,,No,0-2,0-2,0-2,Yes,18,95,bar,34.08,56,0,4,1,1
 P26,21,F,Student,4. 0,4,Mario Kart,No,0-2,0-2,0-2,Yes,8,75,bar,31.1,42,1,2,0,0
 P27,23,M,Student,4. 0,4,,No,0-2,0-2,0-2,Yes,17,85,acrylic,30.38,31,0,3,0,0
 P28,27,M,Student,7. 0,7,,Yes,5-Mar,0-2,0-2,Yes,18,60,acrylic,36.27,37,1,10,2,0
-P29,24,M,Student. chef,5. 11,"5,916,666,667",,No,5+,0-2,0-2,Yes,18,65,acrylic,25.21,35,1,2,0,0
+P29,24,M,Student. chef,5. 11,5.916666667,,No,5+,0-2,0-2,Yes,18,65,acrylic,25.21,35,1,2,0,0
 P30,25,M,Student,5. 0,5,,Yes,0-2,0-2,0-2,Yes,15,87.5,bar,28.39,38,1,1,4,0
 P31,22,M,Student,4. 0,4,,No,5-Mar,0-2,0-2,No,15,60,bar,50.14,41,1,10,0,2
 P32,22,F,Student,5. 0,5,,No,0-2,0-2,0-2,Yes,11,90,acrylic,50.07,48,0,2,0,0
 P33,23,F,Student,5. 0,5,,No,0-2,0-2,0-2,Yes,15,77.5,acrylic,22.6,62,1,4,0,5
 P34,23,M,Student,5. 0,5,Need for Speed ProStreet,No,5+,0-2,0-2,Yes,21,70,bar,23.83,55,1,5,0,0
 P35,20,M,Student,2. 0,2,,Yes,5+,0-2,0-2,No,16,82.5,bar,42.6,50,2,15,0,0
-P36,21,M,Student,3. 4,"3,333,333,333",,No,0-2,0-2,0-2,No,25,85,acrylic,40.31,49,0,8,0,4
-P37,23,M,Student,5. 5,"5,416,666,667",,No,5+,0-2,0-2,Yes,6,90,acrylic,28.09,29,0,4,0,0
+P36,21,M,Student,3. 4,3.333333333,,No,0-2,0-2,0-2,No,25,85,acrylic,40.31,49,0,8,0,4
+P37,23,M,Student,5. 5,5.416666667,,No,5+,0-2,0-2,Yes,6,90,acrylic,28.09,29,0,4,0,0
 P38,20,M,Student,3. 0,3,Gran Turismo,Yes,5-Mar,0-2,0-2,Yes,17,95,bar,34.98,49,0,0,0,2
 P39,23,F,Student,6. 0,6,,Yes,5-Mar,0-2,0-2,Yes,9,67.5,bar,27.97,43,0,2,0,1
 P40,20,M,Student,3. 0,3,,No,0-2,0-2,0-2,Yes,18,85,bar,40.39,49,0,2,4,3
 P41,23,M,Student,5. 0,5,,No,5+,0-2,0-2,Yes,13,92.5,acrylic,48.34,57,0,1,1,0
 P42,20,M,Student,3. 6,3.5,,No,5+,0-2,0-2,Yes,19,82.5,acrylic,21.06,41,0,1,2,0
-P43,23,F,Student,5. 5,"5,416,666,667",,No,0-2,0-2,0-2,Yes,14,50,combination,49.58,61,1,4,1,3
-P44,21,M,Student,2. 10,"2,833,333,333",Forza,No,5+,0-2,0-2,No,12,87.5,bar,28.82,42,0,1,0,0
-P45,22,M,Student,4. 5,"4,416,666,667",,No,5+,0-2,0-2,Yes,12,85,touch_only,37.07,47,0,0,0,2
+P43,23,F,Student,5. 5,5.416666667,,No,0-2,0-2,0-2,Yes,14,50,combination,49.58,61,1,4,1,3
+P44,21,M,Student,2. 10,2.833333333,Forza,No,5+,0-2,0-2,No,12,87.5,bar,28.82,42,0,1,0,0
+P45,22,M,Student,4. 5,4.416666667,,No,5+,0-2,0-2,Yes,12,85,touch_only,37.07,47,0,0,0,2
