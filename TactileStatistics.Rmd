@@ -69,7 +69,7 @@ summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
 pd <- position_dodge(0.1) # move them .05 to the left and right
 
 ```
-```{r}
+```{r, include=FALSE}
 library(cowplot)
 dev.new(width=5,height=4,noRStudioGD = TRUE)
 
@@ -112,17 +112,30 @@ SaveSixPlots <- function(Metric="NULL",filetype=".pdf"){
 ```
 
 ## Introduction
-A study on driving performance and In Vehicle infotainment system has been done. The study aims two answer two questions.
+A study on driving performance and In Vehicle infotainment system has been done. The study aims to answer two questions.
 1) Can the addition of tactile navigation improve driving performance
 2) Which tactile navigation (if any) improves driving performance most
 
 The first part of this statistical analysis aims to investigate the sample to answer if the data is normally distributed and if the participants's characteristics are distributed across the four conditions. If this is not the case an effect of condition could be attributed to other personal factors of the participants (e.g. gaming experience).
 
-Independent variable: Condition (Acrylic, Bar, Combination & Touch only)
+Dependent variables:  
+- SUS  
+- SART  
+- Total Crash  
+- Lane Breaks  
+- Total Glances  
+- Total Glance Time  
+  
+Independent variable:  
+- Condition (Acrylic, Bar, Combination & Touch only)
 
-Metrics: SUS, SART, Glance Time, Total Glances, Lane Breaks, Total Crash.
-
-Demographics: Gender, Age, Gaming experience, Driving experience, Simulator experience, Car games experience, Automatic gear expereience
+Demographics:  
+- Age  
+- Gender  
+- Gaming  
+- Drivers licence Years  
+- Automatic gear experience  
+- Car Simulator  
 
 ## Population
 ```{r, echo=FALSE} 
@@ -140,31 +153,28 @@ Demographics: Gender, Age, Gaming experience, Driving experience, Simulator expe
 
 ```{r, echo=FALSE} 
 GenderCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Gender))
-GenderCondition <- GenderCondition + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:15)) + ggtitle("Gender distribution")+ scale_fill_brewer(palette=Palette)
+GenderCondition <- GenderCondition + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:15)) + ggtitle("Gender and Condition")+ scale_fill_brewer(palette=Palette)
 
 AgeCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Age,fill = Condition))
-AgeCondition <- AgeCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_continuous(breaks = c(20:34)) + scale_fill_discrete(name = "Condition") + ggtitle("Age distribution") + scale_fill_brewer(palette=Palette)
+AgeCondition <- AgeCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_continuous(breaks = c(20:34)) + scale_fill_discrete(name = "Condition") + ggtitle("Age and Condition") + scale_fill_brewer(palette=Palette) 
 
 ComputerCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = ComputerGames))
-ComputerCondition <- ComputerCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Computer gaming (Hours)") + ggtitle("Gaming experience distribution") + scale_fill_brewer(palette=Palette)
+ComputerCondition <- ComputerCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Computer gaming (Hours)") + ggtitle("General gaming pr. week and Condition") + scale_fill_brewer(palette=Palette)
 
 DrivingCondition <- ggplot(data=SartSusDemo, mapping=aes(x=YearDriversLicence,fill = Condition))
-DrivingCondition <- DrivingCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_binned(n.breaks = 20) + scale_fill_discrete(name = "Condition") + ggtitle("Drivers licence distribution")+ scale_fill_brewer(palette=Palette)
+DrivingCondition <- DrivingCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15))+scale_x_binned(n.breaks = 20) + scale_fill_discrete(name = "Condition") + ggtitle("Years with drivers licence and Condition")+ scale_fill_brewer(palette=Palette)
 
 SimulatorYesNoExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = SimulatorExperience))
-SimulatorYesNoExperienceCondition <- SimulatorYesNoExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Car simulator experience") + ggtitle("Car simulator experience distribution")+ scale_fill_brewer(palette=Palette)
+SimulatorYesNoExperienceCondition <- SimulatorYesNoExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Car simulator experience (Y/N)") + ggtitle("Car simulator experience and Condition")+ scale_fill_brewer(palette=Palette)
 
 CarGamesCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarGames))
-CarGamesCondition <- CarGamesCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Car gaming (Hours)") + ggtitle("Car gaming experience distribution")+ scale_fill_brewer(palette=Palette)
+CarGamesCondition <- CarGamesCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Car gaming (Hours)") + ggtitle("Car gaming pr. week and Condition")+ scale_fill_brewer(palette=Palette)
 
 CarSimulatorExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = CarSimulators))
-CarSimulatorExperienceCondition <- CarSimulatorExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Car simulator gaming (Hours)") + ggtitle("Car simulator gaming")+ scale_fill_brewer(palette=Palette)
+CarSimulatorExperienceCondition <- CarSimulatorExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) +scale_fill_discrete(name = "Car simulator gaming (Hours)") + ggtitle("Car simulator pr. week and Condition")+ scale_fill_brewer(palette=Palette)
 
 AutomaticExperienceCondition <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,fill = Automatic))
-AutomaticExperienceCondition <-AutomaticExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_fill_discrete(name = "Automatic experience  (Y/N)") + ggtitle("Automatic experience distribution")+ scale_fill_brewer(palette=Palette)
-
-
-
+AutomaticExperienceCondition <-AutomaticExperienceCondition + geom_bar(col="black", size=.3) + scale_y_continuous(name = "Count",breaks=c(0:15)) + scale_fill_discrete(name = "Automatic experience  (Y/N)") + ggtitle("Automatic experience and Condition")+ scale_fill_brewer(palette=Palette)
 
 GenderCondition + scale_fill_brewer(palette=Palette)
 AgeCondition+ scale_fill_brewer(palette=Palette)
@@ -176,26 +186,46 @@ AutomaticExperienceCondition+ scale_fill_brewer(palette=Palette)
 CarSimulatorExperienceCondition+ scale_fill_brewer(palette=Palette)
 ```
 
+
+```{r, echo=FALSE}  
+# Levenes test for homoscidaddle med hensyn til condition og demographics
+# attach(SartSusDemo)
+# AgeHomo <-  leveneTest(Age ~ Condition, SartSusDemo)
+# YearHomo = leveneTest(YearDriversLicence ~ Condition, SartSusDemo)
+# pvalue <- AgeHomo$`Pr(>F)`
+# AgeCondition <-AgeCondition + geom_text(data=AgeHomo,aes(x =1,y = 1, label = paste("italic(R)^2", "==", pvalue)))
+# AgeHomo
+# YearHomo
+# AgeCondition
+```
+
+
 A summary of 'Age' and 'Years with drivers licence'. As with the bar graph for age we have a lot of people between 20-23 and most participants have had a drivers licence for 3-5 years.
-```{r, echo=FALSE} 
-Demographicssummary <- summary(SartSusDemo[c('Age','YearDriversLicence')])
+```{r, echo=TRUE} 
+Agessummary <- summary(SartSusDemo[c('Age')])
+
+Drivingsummary <- summary(SartSusDemo[c('YearDriversLicence')])
 
 Metricsummary <- summary(SartSusDemo[c('SART','SUS','Total_Glance_time','Total_Glances','Total_crash','Lane_Breaks')])
-Demographicssummary
 
+Agessummary
 sd(SartSusDemo$Age)
+
+Drivingsummary
 sd(SartSusDemo$YearDriversLicence)
 
 ```
 
 ```{r,echo=FALSE}
+library(cowplot)
 dev.new(width=5,height=4,noRStudioGD = TRUE)
 
 Metric="Demographics"
-ggsave(filename="GenderCondition.pdf",plot=GenderCondition, path = Metric)
-    ggsave(filename="AgeCondition.pdf",plot=AgeCondition, path = Metric)
+    dir.create(Metric)
+    ggsave(filename="GenderCondition.pdf",plot=GenderCondition, path = Metric)
+    ggsave(filename="AgeCondition.png",plot=AgeCondition, path = Metric)
     ggsave(filename="ComputerCondition.pdf",plot=ComputerCondition, path = Metric)
-    ggsave(filename="DrivingCondition.pdf",plot=DrivingCondition, path = Metric)
+    ggsave(filename="DrivingCondition.png",plot=DrivingCondition, path = Metric)
     ggsave(filename="SimulatorYesNoExperienceCondition.pdf",plot=SimulatorYesNoExperienceCondition, path = Metric)
     ggsave(filename="CarGamesCondition.pdf",plot=CarGamesCondition, path = Metric)
     ggsave(filename="AutomaticExperienceCondition.pdf",plot=AutomaticExperienceCondition, path = Metric)
@@ -208,7 +238,6 @@ To answer the first question of whether condition have an effect on the 6 metric
 ### Plot of means Condition/metric
 ```{r,echo=FALSE}
 tgc <- summarySE(SartSusDemo, measurevar="SUS", groupvars=c("Condition"))
-tgc
 ```
 ```{r,echo=FALSE}
 # Use 95% confidence interval instead of SEM
@@ -216,11 +245,10 @@ SusCondition <- ggplot(tgc, aes(x=Condition, y=SUS, colour=Condition)) +
     geom_errorbar(aes(ymin=SUS-ci, ymax=SUS+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd) 
-SusCondition  + scale_colour_brewer(palette=Palette)
+plot1 <- SusCondition  + scale_colour_brewer(palette=Palette)
 ```
 ```{r,echo=FALSE}
 tgc <- summarySE(SartSusDemo, measurevar="SART", groupvars=c("Condition"))
-tgc
 ```
 ```{r,echo=FALSE}
 # Use 95% confidence interval instead of SEM
@@ -228,11 +256,10 @@ SartCondition <- ggplot(tgc, aes(x=Condition, y=SART, colour=Condition)) +
     geom_errorbar(aes(ymin=SART-ci, ymax=SART+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
-SartCondition+scale_colour_brewer(palette=Palette)
+plot2 <- SartCondition+scale_colour_brewer(palette=Palette)
 ```
 ```{r,echo=FALSE}
 tgc <- summarySE(SartSusDemo, measurevar="Total_crash", groupvars=c("Condition"))
-tgc
 ```
 ```{r,echo=FALSE}
 # Use 95% confidence interval instead of SEM
@@ -240,11 +267,10 @@ CrashCondition <- ggplot(tgc, aes(x=Condition, y=Total_crash, colour=Condition))
     geom_errorbar(aes(ymin=Total_crash-ci, ymax=Total_crash+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
-CrashCondition+scale_colour_brewer(palette=Palette)
+plot3 <- CrashCondition+scale_colour_brewer(palette=Palette)
 ```
 ```{r,echo=FALSE}
 tgc <- summarySE(SartSusDemo, measurevar="Lane_Breaks", groupvars=c("Condition"))
-tgc
 ```
 ```{r,echo=FALSE}
 # Use 95% confidence interval instead of SEM
@@ -252,11 +278,10 @@ LaneCondition <- ggplot(tgc, aes(x=Condition, y=Lane_Breaks, colour=Condition)) 
     geom_errorbar(aes(ymin=Lane_Breaks-ci, ymax=Lane_Breaks+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
-LaneCondition+scale_colour_brewer(palette=Palette)
+plot4 <- LaneCondition+scale_colour_brewer(palette=Palette)
 ```
 ```{r,echo=FALSE}
 tgc <- summarySE(SartSusDemo, measurevar="Total_Glances", groupvars=c("Condition"))
-tgc
 ```
 ```{r,echo=FALSE}
 # Use 95% confidence interval instead of SEM
@@ -264,11 +289,10 @@ GlancesCondition <- ggplot(tgc, aes(x=Condition, y=Total_Glances, colour=Conditi
     geom_errorbar(aes(ymin=Total_Glances-ci, ymax=Total_Glances+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
-GlancesCondition+scale_colour_brewer(palette=Palette)
+plot5 <- GlancesCondition+scale_colour_brewer(palette=Palette)
 ```
 ```{r,echo=FALSE}
 tgc <- summarySE(SartSusDemo, measurevar="Total_Glance_time", groupvars=c("Condition"))
-tgc
 ```
 ```{r,echo=FALSE}
 # Use 95% confidence interval instead of SEM
@@ -276,15 +300,33 @@ GlanceTimeCondition<- ggplot(tgc, aes(x=Condition, y=Total_Glance_time, colour=C
     geom_errorbar(aes(ymin=Total_Glance_time-ci, ymax=Total_Glance_time+ci), width=.1, position=pd) +
     geom_line(position=pd) +
     geom_point(position=pd)
-GlanceTimeCondition+scale_colour_brewer(palette=Palette)
+plot6 <- GlanceTimeCondition+scale_colour_brewer(palette=Palette)
+```
+```{r,include=FALSE}
+width = 5
+height = 6
+dpi = 150 
+units = "in"
+Metric="MetricsCondition"
+    dir.create(Metric)
+
+ggsave(filename="SUSCondition.pdf",plot=plot1, path = Metric, width = width, height = height, dpi = dpi, units =units)
+    ggsave(filename="SARTCondition.pdf",plot=plot2, path = Metric,width = width, height = height, dpi = dpi, units =units)
+    ggsave(filename="CrashCondition.pdf",plot=plot3, path = Metric,width = width, height = height, dpi = dpi, units =units)
+    ggsave(filename="LaneBreaksCondition.pdf",plot=plot4, path = Metric,width = width, height = height, dpi = dpi, units =units)
+    ggsave(filename="GlancesCondition.pdf",plot=plot5, path = Metric,width = width, height = height, dpi = dpi, units =units)
+    ggsave(filename="GlanceTimeCondition.pdf",plot=plot6, path = Metric,width = width, height = height, dpi = dpi, units =units)
 ```
 
-To test significance we will use ANOVA
-ANOVA has Three assumptions
-1) Normality
-2) Homogenity
-3) Independence
+
+
+To test significance we will use ANOVA  
+ANOVA has Three assumptions  
+1) Normality  
+2) Homogenity  
+3) Independence  
 The assumption of Independence is meet as our participants haven't influence each other in any way we know of. The participants were instructed not to speak with each other between trials and we can hope they have met this instruction.
+
 
 ### Test of normality - Condition/metric
 ```{r}
@@ -323,6 +365,8 @@ Cond4 <- subset(SartSusDemo, SartSusDemo$Condition=='Acrylic')
   shapiro.test(Cond3$Total_crash)
   shapiro.test(Cond4$Total_crash)
 ```
+### qqplots of the not normally distributed
+
 There are 8 scores which break normality  
 Condition 1 - SUS  (0.001505)  
 Condition 2 - SART (0.02632)  
@@ -332,19 +376,7 @@ Condition 3 - Lane breaks (0.03216)
 Condition 1 - Total Crash (0.0001052)  
 Condition 2 - Total Crash (0.0001063)  
 Condition 3 - Total Crash (0.002371)  
-Condition 4 - Total Crash (0.0001063)
-
-Another way to present the crash data would be to score crashes pr condition:
-```{r,echo=FALSE}
-#OnlyCrashes <- subset(SartSusDemo, Total_crash >= 1,select=c(Condition, Total_crash))
-
-TotalCrash <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,y=Total_crash,fill=Condition))
-TotalCrash <- TotalCrash + geom_col(col="black") + scale_y_continuous(name = "Crash count",breaks=c(0:15))+ ggtitle("Total Crash ") #+ scale_x_binned()
-
-Palette <- "Set1"
-TotalCrash + scale_fill_brewer(palette=Palette)
-```
-It can be seen on this graph that each condition has about the same total crashes and some conditions have one or two participants responsible for extra crashes.
+Condition 4 - Total Crash (0.0001063)  
 
 ```{r,echo=FALSE}
 #The significantly not normally distributed metrics will be plottet with a qq plot to determnine how they are skewed
@@ -381,8 +413,19 @@ q7<- qqPlot(Cond3$Total_crash)
 q8<- qqPlot(Cond4$Total_crash)
 ```
 
+### Rethink crash data
+Another way to present the crash data would be to score crashes pr condition:
+```{r,echo=FALSE}
+TotalCrash <- ggplot(data=SartSusDemo, mapping=aes(x=Condition,y=Total_crash,fill=Condition))
+TotalCrash <- TotalCrash + geom_col(col="black") + scale_y_continuous(name = "Crash count",breaks=c(0:15))+ ggtitle("Total Crash ") #+ scale_x_binned()
+
+Palette <- "Set1"
+TotalCrash + scale_fill_brewer(palette=Palette)
+```
+It can be seen on this graph that each condition has about the same total crashes and some conditions have one or two participants responsible for extra crashes.  
+
 ### Test of homogeneity - Condition/metric
-To test for homogeneity we'll use Levines test for the scores which aren't normally distributed and Bartletts test for the scores which are normally distributed.
+To test for homogeneity we'll use Levines test for the scores which aren't normally distributed and Bartletts test for the scores which are normally distributed.  
 ```{r,echo=FALSE}
 library(car)
 SusVariance = leveneTest(SUS ~ Condition, SartSusDemo)
@@ -402,52 +445,130 @@ Crashvariance
 LaneBreaksvariance
 ```
 We see that the variance in metrics across the four conditions are not significantly different.
+### Distribution of metrics (Bar and density)
+- SUS  
+- SART  
+- Total Crash  
+- Lane Breaks  
+- Total Glances  
+- Total Glance Time  
 
+#### Bar
+```{r}
+SUSTotal <- ggplot(data=SartSusDemo, mapping=aes(x=SUS,fill = Condition))
+SUSTotal <- SUSTotal + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:150)) + ggtitle("SUSTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+SARTTotal <- ggplot(data=SartSusDemo, mapping=aes(x=SART,fill = Condition))
+SARTTotal <- SARTTotal + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:150)) + ggtitle("SARTTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+TotalCrashTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Total_crash,fill = Condition))
+TotalCrashTotal <- TotalCrashTotal + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:150)) + ggtitle("TotalCrashTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+LaneBreakTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Lane_Breaks,fill = Condition))
+LaneBreakTotal <- LaneBreakTotal + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:150)) + ggtitle("LaneBreakTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+GlancesTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Total_Glances,fill = Condition))
+GlancesTotal <- GlancesTotal + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:150)) + ggtitle("GlancesTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+GlanceTimeTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Total_Glance_time,fill = Condition))
+GlanceTimeTotal <- GlanceTimeTotal + geom_bar(col="black", size=.3)+ scale_y_continuous(name = "Count",breaks=c(0:150)) + ggtitle("SUGlanceTimeTotalSTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+SUSTotal
+SARTTotal
+TotalCrashTotal
+LaneBreakTotal
+GlancesTotal
+GlanceTimeTotal
+```
+
+#### Density
+```{r}
+alpha <- 0.4
+SUSTotal <- ggplot(data=SartSusDemo, mapping=aes(x=SUS,fill = Condition,alpha=alpha))
+SUSTotal <- SUSTotal + geom_density()  + ggtitle("SUSTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+SARTTotal <- ggplot(data=SartSusDemo, mapping=aes(x=SART,fill = Condition,alpha=alpha))
+SARTTotal <- SARTTotal + geom_density()  + ggtitle("SARTTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+TotalCrashTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Total_crash,fill = Condition,alpha=alpha))
+TotalCrashTotal <- TotalCrashTotal + geom_density()  + ggtitle("TotalCrashTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+LaneBreakTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Lane_Breaks,fill = Condition,alpha=alpha))
+LaneBreakTotal <- LaneBreakTotal + geom_density()  + ggtitle("LaneBreakTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+GlancesTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Total_Glances,fill = Condition,alpha=alpha))
+GlancesTotal <- GlancesTotal + geom_density()  + ggtitle("GlancesTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+GlanceTimeTotal <- ggplot(data=SartSusDemo, mapping=aes(x=Total_Glance_time,fill = Condition,alpha=alpha))
+GlanceTimeTotal <- GlanceTimeTotal + geom_density() + ggtitle("SUGlanceTimeTotalSTotal distribution")+ scale_fill_brewer(palette=Palette)
+
+# SUSTotal
+# SARTTotal
+# TotalCrashTotal
+# LaneBreakTotal
+# GlancesTotal
+# GlanceTimeTotal
+
+ggplot(SartSusDemo, aes(x=Total_Glances, y=Total_Glance_time,color=Condition)) + geom_point(size=2, shape=23) + geom_smooth(method=lm,se=FALSE)
+```
+
+### Test significance
 We now have two options  
 1) Compute an ANOVA because it is said to be somewhat robust against violations of normal distribution  
-2) Compute a Welsh ANOVA (it is robust against normal distribution but unequal variance (heteroscedastic))   
+2) Compute a Welsh ANOVA (it is robust against normal distribution but not unequal variance (heteroscedastic))   
 3) Compute a Kruskal-Wallis test - as our data has equal varience (homoscedasticity) but is not normally distributed  
 
 We will choose option 3) and compute the Kruskal-Wallis test
+
+Note: Total Glance Time is both normally distributed and has homoscedasticity and therefore an anova can be computed
 
 ```{r}
 SUS <- kruskal.test(SUS ~ Condition, data = SartSusDemo)
 SART <- kruskal.test(SART ~ Condition, data = SartSusDemo)
 Glances <- kruskal.test(Total_Glances ~ Condition, data = SartSusDemo)
-GlanceTime <- kruskal.test(Total_Glance_time ~ Condition, data = SartSusDemo)
 Crashes <- kruskal.test(Total_crash ~ Condition, data = SartSusDemo)
 LaneBreaks <- kruskal.test(Lane_Breaks ~ Condition, data = SartSusDemo)
-# 
+GlanceTime <- aov(Total_Glance_time ~ Condition, data = SartSusDemo, var.equal = TRUE)
+
+#fuckery
+SUSanova <- aov(SUS ~ Condition, data = SartSusDemo)
+qqPlot(resid(SUSanova))
+qqPlot(resid(GlanceTime))
+
 SUS
 SART
 Glances
-GlanceTime
 Crashes
 LaneBreaks
+summary(GlanceTime)
+
 ```
+None of the 6 metrics have significant differences between conditions
+
 
 ### General metrics qqplot
-To examine if the general metrics are normally distributed qqplots have been made for them.¨
+To examine if the general metrics are normally distributed qqplots have been made for them.
 
 ```{r,echo=FALSE}
-library("car")
+ library("car")
+
 qqPlot(SartSusDemo$SUS)
-  shapiro.test(SartSusDemo$SUS)
-
+   shapiro.test(SartSusDemo$SUS)
+ 
 qqPlot(SartSusDemo$SART)
-  shapiro.test(SartSusDemo$SART)
-
+   shapiro.test(SartSusDemo$SART)
+   
 qqPlot(SartSusDemo$Total_Glance_time)
-  shapiro.test(SartSusDemo$Total_Glance_time)
-
+   shapiro.test(SartSusDemo$Total_Glance_time)
+ 
 qqPlot(SartSusDemo$Total_Glances)
-  shapiro.test(SartSusDemo$Total_Glances)
-
+   shapiro.test(SartSusDemo$Total_Glances)
+  
 qqPlot(SartSusDemo$Total_crash)
-  shapiro.test(SartSusDemo$Total_crash)
-
+   shapiro.test(SartSusDemo$Total_crash)
+ 
 qqPlot(SartSusDemo$Lane_Breaks)
-  shapiro.test(SartSusDemo$Lane_Breaks)
+   shapiro.test(SartSusDemo$Lane_Breaks)
 
 ```
 
@@ -461,6 +582,8 @@ qqPlot(SartSusDemo$Lane_Breaks)
 
 
 ## Plot of means - All Dependent variables vs All Independent variables
+To investigate weather differences in demographics have had an influence on conditions a plot of means for each metric will be performed with each independent variable. This will be done with wiskers as 95% confidence interval and if the data has homoscedasticity it could be possible to eyeball significant influences. If these are detected we'll perform a t-test 
+
 Dependent variables:  
 - SUS  
 - SART  
@@ -1003,34 +1126,16 @@ plot6<- ggplot(tgc, aes(x=Automatic, y=Total_Glance_time, colour=Automatic)) +
 ```
 
 
-##T-tests
-```{r,include=FALSE}
-# Combi <- SartSusDemo[which(SartSusDemo$Condition=='Combination'),]
-# Touch <- SartSusDemo[which(SartSusDemo$Condition=='Touch_only'),]
-# Bar <- SartSusDemo[which(SartSusDemo$Condition=='Bar'),]
-# Acrylic <- SartSusDemo[which(SartSusDemo$Condition=='Acrylic'),]
-# 
-# CombiTouch <- subset(SartSusDemo, Condition=='Combination' | Condition=='Touch_only', 
-# select=c(Participants, SUS,Condition))
-# 
-# 
-# TSusCondition = t.test(formula = SUS ~ Condition, data = CombiTouch)
-# TSusCondition
-# 
-# one.way <- aov(SUS ~ Condition, data = SartSusDemo)
-# summary(one.way)
-
-```
 
 ## From the many plot of means with confidence interval 95% as wisksers we've determined to test the following interactions
 
 ```{r}
 LaneBreaksAutomatic  <- t.test(formula = Lane_Breaks ~ Automatic, data = SartSusDemo)
 SartGender <- t.test(formula = SART ~ Gender, data = SartSusDemo)
-CrashComputer <- aov(formula = Total_crash ~ ComputerGames, data = SartSusDemo)
+CrashComputer <- kruskal.test(formula = Total_crash ~ ComputerGames, data = SartSusDemo)
 CrashAutomatic <- t.test(formula = Total_crash ~ Automatic, data = SartSusDemo)
 GlanceTimeAutomatic <- t.test(formula = Total_Glance_time ~ Automatic, data = SartSusDemo)
-GlanceCondition <- aov(formula = Total_Glance_time ~ Condition, data = SartSusDemo)
+GlanceCondition <- kruskal.test(formula = Total_Glance_time ~ Condition, data = SartSusDemo)
 GlancesGender <- t.test(formula = Total_Glances ~ Gender, data = SartSusDemo)
 GlancesAutomatic <- t.test(formula = Total_Glances ~ Automatic, data = SartSusDemo)
 
@@ -1041,10 +1146,10 @@ detach()
 
  LaneBreaksAutomatic
  SartGender
- summary(CrashComputer)
+ CrashComputer
  CrashAutomatic
  GlanceTimeAutomatic
- summary(GlanceCondition)
+ GlanceCondition
  GlancesGender
  GlancesAutomatic
  GlancesCondition
@@ -1055,16 +1160,17 @@ detach()
 
 When analysing this much data the risk of p-hacking increases. We'll only use these significanses if there is a big heteroscedasticity in regards to the four conditions maybe this change can explain 
 
-The four significant effects were:  
+The three significant effects were:  
 1) Lane_Breaks by Automatic 0.01666  
 2) Total_Glance_time by Automatic 0.007043  
+3) SART by Gender 0.02699 
 
+We'll see if these effects have been equally distributed across the four conditions:  
 ```{r}
 AutomaticExperienceCondition
 ```
 Automatic experience is distributed quite nice with a difference of 2 between highest and lowest.
 Therefore this effect is irrelevant.  
-3) SART by Gender 0.02699 
 ```{r}
 GenderCondition
 ```
