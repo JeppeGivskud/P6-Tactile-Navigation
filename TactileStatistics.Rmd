@@ -351,7 +351,7 @@ The assumption of Independence is meet as our participants haven't influence eac
 Cond1 <- subset(dataFrame, dataFrame$Condition == "Combination")
 Cond2 <- subset(dataFrame, dataFrame$Condition == "Touch_only")
 Cond3 <- subset(dataFrame, dataFrame$Condition == "Bar")
-Cond4 <- subset(dataFrame, dataFrame$Condition == "Scrylic")
+Cond4 <- subset(dataFrame, dataFrame$Condition == "Acrylic")
 
 shapiro.test(Cond1$SUS)
 shapiro.test(Cond2$SUS)
