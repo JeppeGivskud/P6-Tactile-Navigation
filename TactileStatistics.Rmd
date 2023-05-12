@@ -460,7 +460,7 @@ shapiro_test(residuals(glanceCountModel))
 
 bartlett.test(TotalGlances ~ Condition, data = glanceCountData)
 
-glanceCountTest <- glanceCountData %>% anova_test(TotalGlances ~ Condition)
+glanceCountTest <- glanceCountData %>% welch_anova_test(TotalGlances ~ Condition)
 glanceCountTest
 ```
 
