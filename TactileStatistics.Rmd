@@ -333,10 +333,6 @@ ggsave(filename = "GlancesCondition.pdf", plot = plot5, path = Metric, width = w
 ggsave(filename = "GlanceTimeCondition.pdf", plot = plot6, path = Metric, width = width, height = height, dpi = dpi, units = units)
 ```
 
-
-
-
-
 ### Distribution of metrics (Bar and density)
 - SUS  
 - SART  
@@ -412,8 +408,161 @@ ggplot(dataFrame, aes(x = TotalGlances, y = TotalGlanceTime, color = Condition))
 # summary(SARTSUS)
 # ggplot(dataFrame,aes(SART, SUS,color=Condition)) + geom_point() + geom_smooth(method='lm',se=FALSE)
 ```
-<!-- It is seen that the SART does not influence the SUS in a significant way. -->
 
+## Statistical analysis
+Statistics will be run on all driving performance metrics grouped by conditions, to look for significant main effects.
+The normality and the variance will be analysed to ensure the correct statistical test is being used.
+Sharpiro Wilk test will be used to analyse the distribution of the residuals.
+Bartlett's test will be used in case of normality to analyse the variance
+Levenes test will be used in case the residuals are not normal distributed to analyse the variance
+
+### Analysis of Glance Time grouped by conditions
+The residuals proved to be normally distributed and the data has homogene variance which means a standard ANOVA test can be used
+```{r, include=FALSE}
+library(ggpubr)
+#library(tidyverse)
+#library(broom)
+```
+
+```{r}
+
+glanceTimeData <- subset(dataFrame, select = c("Participants", "Condition", "TotalGlanceTime"))
+summary(glanceTimeData)
+get_summary_stats(glanceTimeData)
+
+glanceTimeData %>%
+    group_by(Condition) %>%
+    identify_outliers(TotalGlanceTime)
+
+glanceTimeModel <- lm(TotalGlanceTime ~ Condition, data = glanceTimeData)
+ggqqplot(residuals(glanceTimeModel))
+shapiro_test(residuals(glanceTimeModel))
+
+# We use a bartlett test as the residuals are normally distributed
+bartlett.test(TotalGlanceTime ~ Condition, data = glanceTimeData)
+
+glanceTimeTest <- glanceTimeData %>% anova_test(TotalGlanceTime ~ Condition)
+glanceTimeTest
+```
+
+### Analysis of Glance Count grouped by conditions
+```{r}
+glanceCountData <- subset(dataFrame, select = c("Participants", "Condition", "TotalGlances"))
+summary(glanceCountData)
+get_summary_stats(glanceCountData)
+
+glanceCountData %>%
+    group_by(Condition) %>%
+    identify_outliers(TotalGlances)
+
+glanceCountModel <- lm(TotalGlances ~ Condition, data = glanceCountData)
+ggqqplot(residuals(glanceCountModel))
+shapiro_test(residuals(glanceCountModel))
+
+bartlett.test(TotalGlances ~ Condition, data = glanceCountData)
+
+glanceCountTest <- glanceCountData %>% anova_test(TotalGlances ~ Condition)
+glanceCountTest
+```
+
+### Analysis of Crash Count grouped by condition
+```{r}
+crashData <- subset(dataFrame, select = c("Participants", "Condition", "TotalCrash"))
+summary(crashData)
+get_summary_stats(crashData)
+
+crashData %>%
+    group_by(Condition) %>%
+    identify_outliers(TotalCrash)
+
+crashDataModel <- lm(TotalCrash ~ Condition, data = crashData)
+ggqqplot(residuals(crashDataModel))
+shapiro_test(residuals(crashDataModel))
+
+crashData %>% levene_test(TotalCrash ~ Condition)
+
+crashDataTest <- crashData %>% kruskal_test(TotalCrash ~ Condition)
+crashDataTest
+```
+
+#### Crash Count visualization
+Another way to present the crash data would be to score crashes pr condition:
+```{r,echo=FALSE}
+TotalCrash <- ggplot(data = dataFrame, mapping = aes(x = Condition, y = TotalCrash, fill = Condition))
+TotalCrash <- TotalCrash + geom_col(col = "black") + scale_y_continuous(name = "Crash count", breaks = c(0:15)) + ggtitle("Total Crash ") #+ scale_x_binned()
+
+Palette <- "Set1"
+TotalCrash + scale_fill_brewer(palette = Palette)
+```
+It can be seen on this graph that each condition has about the same total crashes and some conditions have one or two participants responsible for extra crashes.  
+
+### Analysis of Lane Breaks grouped by condition
+```{r}
+laneData <- subset(dataFrame, select = c("Participants", "Condition", "LaneBreaks"))
+summary(laneData)
+get_summary_stats(laneData)
+
+laneData %>%
+    group_by(Condition) %>%
+    identify_outliers(LaneBreaks)
+
+laneDataModel <- lm(LaneBreaks ~ Condition, data = laneData)
+ggqqplot(residuals(laneDataModel))
+shapiro_test(residuals(laneDataModel))
+
+laneData %>% levene_test(LaneBreaks ~ Condition)
+
+laneDataTest <- laneData %>% kruskal_test(LaneBreaks ~ Condition)
+laneDataTest
+```
+
+### Analysis of SUS grouped by condition
+```{r}
+susData <- subset(dataFrame, select = c("Participants", "Condition", "SUS"))
+summary(susData)
+get_summary_stats(susData)
+
+susData %>%
+    group_by(Condition) %>%
+    identify_outliers(SUS)
+
+susDataModel <- lm(SUS ~ Condition, data = susData)
+ggqqplot(residuals(susDataModel))
+shapiro_test(residuals(susDataModel))
+
+susData %>% levene_test(SUS ~ Condition)
+
+susDataTest <- susData %>% kruskal_test(SUS ~ Condition)
+susDataTest
+```
+
+### Analysis of SART grouped by condition
+```{r}
+sartData <- subset(dataFrame, select = c("Participants", "Condition", "SART"))
+sartData <- sartData[!(sartData$Participants == "P12" | sartData$Participants == "P13" | sartData$Participants == "P29" | sartData$Participants == "P30"), ]
+summary(sartData)
+get_summary_stats(sartData)
+
+sartData %>%
+    group_by(Condition) %>%
+    identify_outliers(SART)
+
+sartDataModel <- lm(SART ~ Condition, data = sartData)
+ggqqplot(residuals(sartDataModel))
+shapiro_test(residuals(sartDataModel))
+
+bartlett.test(SART ~ Condition, data = sartData)
+
+sartDataTest <- sartData %>% anova_test(SART ~ Condition)
+sartDataTest
+```
+
+```{r, include=FALSE}
+detach("package:ggpubr")
+#detach("package:tidyverse")
+#detach("package:broom")
+```
+<!-- It is seen that the SART does not influence the SUS in a significant way. -->
 
 ## Plot of means - All Dependent variables vs All Independent variables
 To investigate weather differences in demographics have had an influence on conditions a plot of means for each metric will be performed with each independent variable. This will be done with wiskers as 95% confidence interval and if the data has homoscedasticity it could be possible to eyeball significant influences. If these are detected we'll perform a t-test 
@@ -936,24 +1085,18 @@ SartGender <- t.test(formula = SART ~ Gender, data = dataFrame)
 CrashComputer <- kruskal.test(formula = TotalCrash ~ ComputerGames, data = dataFrame)
 CrashAutomatic <- t.test(formula = TotalCrash ~ Automatic, data = dataFrame)
 GlanceTimeAutomatic <- t.test(formula = TotalGlanceTime ~ Automatic, data = dataFrame)
-GlanceCondition <- kruskal.test(formula = TotalGlanceTime ~ Condition, data = dataFrame)
 GlancesGender <- t.test(formula = TotalGlances ~ Gender, data = dataFrame)
 GlancesAutomatic <- t.test(formula = TotalGlances ~ Automatic, data = dataFrame)
 
 # Måske er der noget med glances og condition
-attach(dataFrame)
-GlancesCondition <- pairwise.t.test(TotalGlances, Condition, p.adj = "bonf")
-detach()
 
 LaneBreaksAutomatic
 SartGender
 CrashComputer
 CrashAutomatic
 GlanceTimeAutomatic
-GlanceCondition
 GlancesGender
 GlancesAutomatic
-GlancesCondition
 ```
 
 When analysing this much data the risk of p-hacking increases. We'll only use these significanses if there is a big heteroscedasticity in regards to the four conditions maybe this change can explain 
@@ -983,146 +1126,3 @@ ANOVA has Three assumptions
 3) Independence  
 The assumption of Independence is meet as our participants haven't influence each other in any way we know of. The participants were instructed not to speak with each other between trials and we can hope they have met this instruction.
 
-## Statistical analysis
-Statistics will be run on all driving performance metrics grouped by conditions, to look for significant main effects.
-The normality and the variance will be analysed to ensure the correct statistical test is being used.
-Sharpiro Wilk test will be used to analyse the distribution of the residuals.
-Bartlett's test will be used in case of normality to analyse the variance
-Levenes test will be used in case the residuals are not normal distributed to analyse the variance
-
-### Analysis of Glance Time grouped by conditions
-The residuals proved to be normally distributed and the data has homogene variance which means a standard ANOVA test can be used
-```{r}
-library(ggpubr)
-library(tidyverse)
-library(broom)
-glanceTimeData <- subset(dataFrame, select = c("Participants", "Condition", "TotalGlanceTime"))
-summary(glanceTimeData)
-get_summary_stats(glanceTimeData)
-
-glanceTimeData %>%
-    group_by(Condition) %>%
-    identify_outliers(TotalGlanceTime)
-
-glanceTimeModel <- lm(TotalGlanceTime ~ Condition, data = glanceTimeData)
-ggqqplot(residuals(glanceTimeModel))
-shapiro_test(residuals(glanceTimeModel))
-
-# We use a bartlett test as the residuals are normally distributed
-bartlett.test(TotalGlanceTime ~ Condition, data = glanceTimeData)
-
-glanceTimeTest <- glanceTimeData %>% anova_test(TotalGlanceTime ~ Condition)
-glanceTimeTest
-```
-
-### Analysis of Glance Count grouped by conditions
-```{r}
-glanceCountData <- subset(dataFrame, select = c("Participants", "Condition", "TotalGlances"))
-summary(glanceCountData)
-get_summary_stats(glanceCountData)
-
-glanceCountData %>%
-    group_by(Condition) %>%
-    identify_outliers(TotalGlances)
-
-glanceCountModel <- lm(TotalGlances ~ Condition, data = glanceCountData)
-ggqqplot(residuals(glanceCountModel))
-shapiro_test(residuals(glanceCountModel))
-
-bartlett.test(TotalGlances ~ Condition, data = glanceCountData)
-
-glanceCountTest <- glanceCountData %>% anova_test(TotalGlances ~ Condition)
-glanceCountTest
-```
-
-### Analysis of Crash Count grouped by condition
-```{r}
-crashData <- subset(dataFrame, select = c("Participants", "Condition", "TotalCrash"))
-summary(crashData)
-get_summary_stats(crashData)
-
-crashData %>%
-    group_by(Condition) %>%
-    identify_outliers(TotalCrash)
-
-crashDataModel <- lm(TotalCrash ~ Condition, data = crashData)
-ggqqplot(residuals(crashDataModel))
-shapiro_test(residuals(crashDataModel))
-
-crashData %>% levene_test(TotalCrash ~ Condition)
-
-crashDataTest <- crashData %>% kruskal_test(TotalCrash ~ Condition)
-crashDataTest
-```
-
-#### Crash Count visualization
-Another way to present the crash data would be to score crashes pr condition:
-```{r,echo=FALSE}
-TotalCrash <- ggplot(data = dataFrame, mapping = aes(x = Condition, y = TotalCrash, fill = Condition))
-TotalCrash <- TotalCrash + geom_col(col = "black") + scale_y_continuous(name = "Crash count", breaks = c(0:15)) + ggtitle("Total Crash ") #+ scale_x_binned()
-
-Palette <- "Set1"
-TotalCrash + scale_fill_brewer(palette = Palette)
-```
-It can be seen on this graph that each condition has about the same total crashes and some conditions have one or two participants responsible for extra crashes.  
-
-### Analysis of Lane Breaks grouped by condition
-```{r}
-laneData <- subset(dataFrame, select = c("Participants", "Condition", "LaneBreaks"))
-summary(laneData)
-get_summary_stats(laneData)
-
-laneData %>%
-    group_by(Condition) %>%
-    identify_outliers(LaneBreaks)
-
-laneDataModel <- lm(LaneBreaks ~ Condition, data = laneData)
-ggqqplot(residuals(laneDataModel))
-shapiro_test(residuals(laneDataModel))
-
-laneData %>% levene_test(LaneBreaks ~ Condition)
-
-laneDataTest <- laneData %>% kruskal_test(LaneBreaks ~ Condition)
-laneDataTest
-```
-
-### Analysis of SUS grouped by condition
-```{r}
-susData <- subset(dataFrame, select = c("Participants", "Condition", "SUS"))
-summary(susData)
-get_summary_stats(susData)
-
-susData %>%
-    group_by(Condition) %>%
-    identify_outliers(SUS)
-
-susDataModel <- lm(SUS ~ Condition, data = susData)
-ggqqplot(residuals(susDataModel))
-shapiro_test(residuals(susDataModel))
-
-susData %>% levene_test(SUS ~ Condition)
-
-susDataTest <- susData %>% kruskal_test(SUS ~ Condition)
-susDataTest
-```
-
-### Analysis of SART grouped by condition
-```{r}
-sartData <- subset(dataFrame, select = c("Participants", "Condition", "SART"))
-sartData <- sartData[!(sartData$Participants == "P12" | sartData$Participants == "P13" | sartData$Participants == "P29" | sartData$Participants == "P30"), ]
-summary(sartData)
-get_summary_stats(sartData)
-
-sartData %>%
-    group_by(Condition) %>%
-    identify_outliers(SART)
-
-sartDataModel <- lm(SART ~ Condition, data = sartData)
-ggqqplot(residuals(sartDataModel))
-shapiro_test(residuals(sartDataModel))
-
-bartlett.test(SART ~ Condition, data = sartData)
-
-sartDataTest <- sartData %>% anova_test(SART ~ Condition)
-sartDataTest
-```
