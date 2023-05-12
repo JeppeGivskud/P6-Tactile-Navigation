@@ -420,12 +420,11 @@ Levenes test will be used in case the residuals are not normal distributed to an
 The residuals proved to be normally distributed and the data has homogene variance which means a standard ANOVA test can be used
 ```{r, include=FALSE}
 library(ggpubr)
-#library(tidyverse)
-#library(broom)
+# library(tidyverse)
+# library(broom)
 ```
 
 ```{r}
-
 glanceTimeData <- subset(dataFrame, select = c("Participants", "Condition", "TotalGlanceTime"))
 summary(glanceTimeData)
 get_summary_stats(glanceTimeData)
@@ -559,8 +558,22 @@ sartDataTest
 
 ```{r, include=FALSE}
 detach("package:ggpubr")
-#detach("package:tidyverse")
-#detach("package:broom")
+# detach("package:tidyverse")
+# detach("package:broom")
+```
+
+### Analysis of use of aid grouped by condition
+```{r}
+aidData <- subset(dataFrame, select = c("Participants", "Condition", "UseOfAid"))
+aidData <- aidData[!(aidData$Condition == "Touch_only"), ]
+summary(aidData)
+get_summary_stats(aidData)
+
+aidPlotData <- subset(aidData, UseOfAid > 0)
+aidPlot <- ggplot(data = aidPlotData, mapping = aes(x = Condition, y = UseOfAid, fill = Condition, label = UseOfAid))
+aidPlot + geom_col(col = "black") +
+    scale_y_continuous(name = "UseOfAid", breaks = c(0:15)) + ggtitle("Use of aid ") +
+    geom_text(size = 6, position = position_stack(vjust = 0.5))
 ```
 <!-- It is seen that the SART does not influence the SUS in a significant way. -->
 
