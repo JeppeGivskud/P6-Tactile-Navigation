@@ -1139,3 +1139,37 @@ ANOVA has Three assumptions
 3) Independence  
 The assumption of Independence is meet as our participants haven't influence each other in any way we know of. The participants were instructed not to speak with each other between trials and we can hope they have met this instruction.
 
+### Analysis of glance duration per task
+Another interesting aspect to look at is the distribution of glance duration across all tasks.
+This could potentially reveal patterns in certain tasks taking longer on average, indicating an imbalance in difficulty among the tasks
+```{r, echo=FALSE}
+urlfile <- "https://raw.githubusercontent.com/JeppeGivskud/P6-Tactile-Navigation/main/Long_data.csv"
+taskLongDataFrame <- read.csv(url(urlfile), header = TRUE, stringsAsFactors = TRUE)
+
+urlfile <- "https://raw.githubusercontent.com/JeppeGivskud/P6-Tactile-Navigation/main/Short_data.csv"
+taskShortDataFrame <- read.csv(url(urlfile), header = TRUE, stringsAsFactors = TRUE)
+taskShortDataFrame <- subset(taskShortDataFrame, Task_nr > 0)
+```
+
+The glance durations are analysed with regards to guidelines found for IVIS designs
+- a single glance should be shorter than 1.5 seconds
+- the total time with eyes off the road should be less than 12 seconds for each task
+```{r}
+percentTooLongGlances <- (sum(taskLongDataFrame$Single_Glance_duration >= 1.5) / sum(taskLongDataFrame$Single_Glance_duration > 0)) * 100
+percentTooLongGlances
+
+percentTooLongTasks <- (sum(taskShortDataFrame$Total_glance_duration_pr_task >= 12) / sum(taskShortDataFrame$Total_glance_duration_pr_task > 0)) * 100
+percentTooLongTasks
+
+singleGlanceBox <- ggplot(taskLongDataFrame, aes(x = Condition, y = Single_Glance_duration, fill = Condition)) +
+    geom_boxplot() +
+    scale_fill_brewer(palette = "Spectral")
+singleGlanceBox
+
+
+glanceTaskBox <- ggplot(taskShortDataFrame, aes(x = Task_nr, y = Total_glance_duration_pr_task, group = Task_nr, fill = factor(Task_nr))) +
+    geom_boxplot() +
+    scale_x_continuous(breaks = seq(0, 10, by = 1)) +
+    scale_fill_brewer(palette = "Spectral")
+glanceTaskBox
+```
