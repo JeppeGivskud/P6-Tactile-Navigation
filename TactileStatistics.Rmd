@@ -583,6 +583,15 @@ plot(residuals(crashDataModel))
 plot(residuals(laneDataModel))
 plot(residuals(susDataModel))
 plot(residuals(sartDataModel))
+
+plot(glanceTimeData$Condition,residuals(glanceTimeModel))
+plot(glanceCountData$Condition,residuals(glanceCountModel))
+plot(crashData$Condition,residuals(crashDataModel))
+plot(laneData$Condition,residuals(laneDataModel))
+plot(susData$Condition,residuals(susDataModel))
+plot(sartData$Condition,residuals(sartDataModel))
+
+
 ```
 
 
