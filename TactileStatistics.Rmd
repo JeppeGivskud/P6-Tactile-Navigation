@@ -556,6 +556,17 @@ sartDataTest <- sartData %>% anova_test(SART ~ Condition)
 sartDataTest
 ```
 
+## Plots of Residuals
+```{r}
+plot(residuals(glanceTimeModel))
+plot(residuals(glanceCountModel))
+plot(residuals(crashDataModel))
+plot(residuals(laneDataModel))
+plot(residuals(susDataModel))
+plot(residuals(sartDataModel))
+```
+
+
 ```{r, include=FALSE}
 detach("package:ggpubr")
 # detach("package:tidyverse")
