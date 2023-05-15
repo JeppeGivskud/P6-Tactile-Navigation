@@ -1165,7 +1165,8 @@ percentTooLongTasks
 singleGlanceBox <- ggplot(taskLongDataFrame, aes(x = factor(Task_nr), y = Single_Glance_duration, fill = factor(Task_nr))) +
     geom_boxplot() +
     scale_fill_brewer(palette = "Spectral") +
-    labs(x = "Task Nr", y = "Single glance time", fill = "Task Nr")
+    labs(x = "Task Nr", y = "Single glance time", fill = "Task Nr", title = "Single glance time grouped by task") +
+    theme(plot.title = element_text(hjust = 0.5))
 singleGlanceBox
 
 
@@ -1173,7 +1174,8 @@ glanceTaskBox <- ggplot(taskShortDataFrame, aes(x = Task_nr, y = Total_glance_du
     geom_boxplot() +
     scale_x_continuous(breaks = seq(0, 10, by = 1)) +
     scale_fill_brewer(palette = "Spectral") +
-    labs(x = "Task Nr", y = "Total glance time", fill = "Task Nr")
+    labs(x = "Task Nr", y = "Total glance time", fill = "Task Nr", title = "Total glance time grouped by task number") +
+    theme(plot.title = element_text(hjust = 0.5))
 glanceTaskBox
 ```
 
