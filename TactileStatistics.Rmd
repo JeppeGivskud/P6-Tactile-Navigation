@@ -372,35 +372,54 @@ GlanceTimeTotal
 #### Density
 ```{r}
 alpha <- 0.4
-SUSTotal <- ggplot(data = dataFrame, mapping = aes(x = SUS, fill = Condition, alpha = alpha))
-SUSTotal <- SUSTotal + geom_density() + ggtitle("SUSTotal distribution") + scale_fill_brewer(palette = Palette)
+SUSDistribution <- ggplot(data = dataFrame, mapping = aes(x = SUS, fill = Condition, alpha = alpha))
+SUSDistribution <- SUSDistribution + geom_density() + ggtitle("SUS distribution") + scale_fill_brewer(palette = Palette)
 
-SARTTotal <- ggplot(data = dataFrame, mapping = aes(x = SART, fill = Condition, alpha = alpha))
-SARTTotal <- SARTTotal + geom_density() + ggtitle("SARTTotal distribution") + scale_fill_brewer(palette = Palette)
+SUSDistribution <- ggplot(data = dataFrame, mapping = aes(x = SART, fill = Condition, alpha = alpha))
+SUSDistribution <- SUSDistribution + geom_density() + ggtitle("SART distribution") + scale_fill_brewer(palette = Palette)
 
-TotalCrashTotal <- ggplot(data = dataFrame, mapping = aes(x = TotalCrash, fill = Condition, alpha = alpha))
-TotalCrashTotal <- TotalCrashTotal + geom_density() + ggtitle("TotalCrashTotal distribution") + scale_fill_brewer(palette = Palette)
+CrashDistribution <- ggplot(data = dataFrame, mapping = aes(x = TotalCrash, fill = Condition, alpha = alpha))
+CrashDistribution <- CrashDistribution + geom_density() + ggtitle("Total Crash distribution") + scale_fill_brewer(palette = Palette)
 
-LaneBreakTotal <- ggplot(data = dataFrame, mapping = aes(x = LaneBreaks, fill = Condition, alpha = alpha))
-LaneBreakTotal <- LaneBreakTotal + geom_density() + ggtitle("LaneBreakTotal distribution") + scale_fill_brewer(palette = Palette)
+LaneBreakDistribution <- ggplot(data = dataFrame, mapping = aes(x = LaneBreaks, fill = Condition, alpha = alpha))
+LaneBreakDistribution <- LaneBreakDistribution + geom_density() + ggtitle("Lane Break distribution") + scale_fill_brewer(palette = Palette)
 
-GlancesTotal <- ggplot(data = dataFrame, mapping = aes(x = TotalGlances, fill = Condition, alpha = alpha))
-GlancesTotal <- GlancesTotal + geom_density() + ggtitle("GlancesTotal distribution") + scale_fill_brewer(palette = Palette)
+GlancesDistribution <- ggplot(data = dataFrame, mapping = aes(x = TotalGlances, fill = Condition, alpha = alpha))
+GlancesDistribution <- GlancesDistribution + geom_density() + ggtitle("Glances distribution") + scale_fill_brewer(palette = Palette)
 
-GlanceTimeTotal <- ggplot(data = dataFrame, mapping = aes(x = TotalGlanceTime, fill = Condition, alpha = alpha))
-GlanceTimeTotal <- GlanceTimeTotal + geom_density() + ggtitle("SUGlanceTimeTotalSTotal distribution") + scale_fill_brewer(palette = Palette)
+GlanceTimeDistribution <- ggplot(data = dataFrame, mapping = aes(x = TotalGlanceTime, fill = Condition, alpha = alpha))
+GlanceTimeDistribution <- GlanceTimeDistribution + geom_density() + ggtitle("Total Glance Time distribution") + scale_fill_brewer(palette = Palette)
 
-# SUSTotal
-# SARTTotal
-# TotalCrashTotal
-# LaneBreakTotal
-# GlancesTotal
-# GlanceTimeTotal
+plot1<- SUSTotal
+plot2<-SARTTotal
+plot3<-TotalCrashTotal
+plot4<-LaneBreakTotal
+plot5<-GlancesTotal
+plot6<-GlanceTimeTotal
 
-ggplot(dataFrame, aes(x = TotalGlances, y = TotalGlanceTime, color = Condition)) +
+
+GlancetimeAndGlanceCount <- ggplot(dataFrame, aes(x = TotalGlances, y = TotalGlanceTime, color = Condition)) +
     geom_point(size = 2, shape = 23) +
     geom_smooth(method = lm, se = FALSE)
 ```
+
+```{r,include=FALSE}
+width <- 6
+height <- 4
+dpi <- 150
+units <- "in"
+Metric <- "Metric Distribution"
+dir.create(Metric)
+
+ggsave(filename = "SUSDistribution.pdf", plot = plot1, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "SARTDistribution.pdf", plot = plot2, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "CrashDistribution.pdf", plot = plot3, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "LaneBreaksDistribution.pdf", plot = plot4, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "GlancesDistribution.pdf", plot = plot5, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "GlanceTimeDistribution.pdf", plot = plot6, path = Metric, width = width, height = height, dpi = dpi, units = units)
+```
+
+
 
 <!-- ### Sammenhæng SART og SUS -->
 ```{r,echo=FALSE}
