@@ -1165,17 +1165,20 @@ percentTooLongTasks
 singleGlanceBox <- ggplot(taskLongDataFrame, aes(x = factor(Task_nr), y = Single_Glance_duration, fill = factor(Task_nr))) +
     geom_boxplot() +
     scale_fill_brewer(palette = "Spectral") +
-    labs(x = "Task Nr", y = "Single glance time", fill = "Task Nr", title = "Single glance time grouped by task") +
-    theme(plot.title = element_text(hjust = 0.5))
+    labs(x = "Task Nr", y = "Single glance time [s]", fill = "Task Nr", title = "Single glance time grouped by task") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_hline(yintercept = 2, color = "red", linetype = "dashed")
 singleGlanceBox
 
 
 glanceTaskBox <- ggplot(taskShortDataFrame, aes(x = Task_nr, y = Total_glance_duration_pr_task, group = Task_nr, fill = factor(Task_nr))) +
     geom_boxplot() +
     scale_x_continuous(breaks = seq(0, 10, by = 1)) +
+    scale_y_continuous(breaks = seq(0, 26, by = 2)) +
     scale_fill_brewer(palette = "Spectral") +
-    labs(x = "Task Nr", y = "Total glance time", fill = "Task Nr", title = "Total glance time grouped by task number") +
-    theme(plot.title = element_text(hjust = 0.5))
+    labs(x = "Task Nr", y = "Total glance time [s]", fill = "Task Nr", title = "Total glance time grouped by task number") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_hline(yintercept = 12, color = "red", linetype = "dashed")
 glanceTaskBox
 ```
 
@@ -1188,19 +1191,30 @@ ggsave(filename = "TotalGlanceBox.pdf", plot = glanceTaskBox, path = dir, width 
 
 ```{r}
 glanceTaskData <- subset(taskShortDataFrame, select = c("Subject", "Condition", "Task_nr", "Total_glance_duration_pr_task"))
-glanceTaskData %>%
+outliers <- glanceTaskData %>%
     group_by(Task_nr) %>%
     identify_outliers(Total_glance_duration_pr_task)
+sum(outliers$is.outlier)
+sum(outliers$is.extreme)
 
 ggplot(glanceTaskData, aes(x = Task_nr, y = Total_glance_duration_pr_task)) +
     geom_point()
 
 glanceTaskModel <- lm(Total_glance_duration_pr_task ~ factor(Task_nr), data = glanceTaskData)
-ggqqplot(residuals(glanceTaskModel))
+glanceTaskqqPlot <- ggqqplot(residuals(glanceTaskModel))
+glanceTaskqqPlot
 plot(glanceTaskModel)
 shapiro_test(residuals(glanceTaskModel))
 
+ggplot(glanceTaskModel, aes(x = residuals(glanceTaskModel))) +
+    geom_density()
+
 glanceTaskData %>% levene_test(Total_glance_duration_pr_task ~ factor(Task_nr))
+```
+
+```{r, echo=FALSE}
+dir <- "TaskAnalysis"
+ggsave(filename = "glanceTaskQQplot.pdf", plot = glanceTaskqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
 ```
 
 The scatterplot shows no clear pattern within the data, so a linear fit approach is used
