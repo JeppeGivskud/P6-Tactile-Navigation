@@ -320,18 +320,16 @@ GlanceTimeCondition <- ggplot(tgc, aes(x = Condition, y = TotalGlanceTime, colou
 plot6 <- GlanceTimeCondition + scale_colour_brewer(palette = Palette)
 ```
 
-```{r}
+```{r,include=FALSE}
 plot1 <- plot1 + theme(legend.position = "none")
 plot2 <- plot2 + theme(legend.position = "none")
 plot3 <- plot3 + theme(legend.position = "none")
 plot4 <- plot4 + theme(legend.position = "none")
 plot5 <- plot5 + theme(legend.position = "none")
 plot6 <- plot6 + theme(legend.position = "none")
-```
 
-```{r,include=FALSE}
 scale <- 0.84
-width <- 6*scale
+width <- 4.3*scale
 height <- 4*scale
 dpi <- 50
 units <- "in"
