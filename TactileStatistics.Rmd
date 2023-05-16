@@ -77,8 +77,15 @@ summarySE <- function(data = NULL, measurevar, groupvars = NULL, na.rm = FALSE,
 }
 pd <- position_dodge(0.1) # move them .05 to the left and right
 ```
+
 ```{r, include=FALSE}
-dev.new(width = 5, height = 4, noRStudioGD = TRUE)
+scale <- 0.84
+width <- 6*scale
+height <- 4*scale
+dpi <- 50
+units <- "in"
+
+#dev.new(width = 5, height = 4, noRStudioGD = TRUE)
 
 SaveSixPlots <- function(Metric = "NULL", filetype = ".pdf") {
     Palette <- "Set1"
@@ -98,12 +105,12 @@ SaveSixPlots <- function(Metric = "NULL", filetype = ".pdf") {
     title5 <- paste(Metric, "-5-SimulatorExperience", filetype, sep = "", collapse = NULL)
     title6 <- paste(Metric, "-6-Automatic", filetype, sep = "", collapse = NULL)
 
-    ggsave(filename = title1, plot = plot1, path = Metric)
-    ggsave(filename = title2, plot = plot2, path = Metric)
-    ggsave(filename = title3, plot = plot3, path = Metric)
-    ggsave(filename = title4, plot = plot4, path = Metric)
-    ggsave(filename = title5, plot = plot5, path = Metric)
-    ggsave(filename = title6, plot = plot6, path = Metric)
+    ggsave(filename = title1, plot = plot1, path = Metric, width = width, height = height, dpi = dpi, units = units)
+    ggsave(filename = title2, plot = plot2, path = Metric, width = width, height = height, dpi = dpi, units = units)
+    ggsave(filename = title3, plot = plot3, path = Metric, width = width, height = height, dpi = dpi, units = units)
+    ggsave(filename = title4, plot = plot4, path = Metric, width = width, height = height, dpi = dpi, units = units)
+    ggsave(filename = title5, plot = plot5, path = Metric, width = width, height = height, dpi = dpi, units = units)
+    ggsave(filename = title6, plot = plot6, path = Metric, width = width, height = height, dpi = dpi, units = units)
 
 
     plot1
@@ -223,18 +230,23 @@ sd(dataFrame$YearDriversLicence)
 ```
 
 ```{r,echo=FALSE}
-dev.new(width = 5, height = 4, noRStudioGD = TRUE)
-
+#dev.new(width = 5, height = 4, noRStudioGD = TRUE)
+scale <- 0.84
+width <- 6*scale
+height <- 4*scale
+dpi <- 20
+units <- "in"
 Metric <- "Demographics"
 dir.create(Metric)
-ggsave(filename = "GenderCondition.pdf", plot = GenderCondition, path = Metric)
-ggsave(filename = "AgeCondition.png", plot = AgeCondition, path = Metric)
-ggsave(filename = "ComputerCondition.pdf", plot = ComputerCondition, path = Metric)
-ggsave(filename = "DrivingCondition.png", plot = DrivingCondition, path = Metric)
-ggsave(filename = "SimulatorYesNoExperienceCondition.pdf", plot = SimulatorYesNoExperienceCondition, path = Metric)
-ggsave(filename = "CarGamesCondition.pdf", plot = CarGamesCondition, path = Metric)
-ggsave(filename = "AutomaticExperienceCondition.pdf", plot = AutomaticExperienceCondition, path = Metric)
-ggsave(filename = "CarSimulatorExperienceCondition.pdf", plot = CarSimulatorExperienceCondition, path = Metric)
+
+ggsave(filename = "GenderCondition.pdf", plot = GenderCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "AgeCondition.pdf", plot = AgeCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "ComputerCondition.pdf", plot = ComputerCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "DrivingCondition.pdf", plot = DrivingCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "SimulatorYesNoExperienceCondition.pdf", plot = SimulatorYesNoExperienceCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "CarGamesCondition.pdf", plot = CarGamesCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "AutomaticExperienceCondition.pdf", plot = AutomaticExperienceCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "CarSimulatorExperienceCondition.pdf", plot = CarSimulatorExperienceCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
 ```
 
 ## Effect due to condition
@@ -318,9 +330,10 @@ plot6 <- plot6 + theme(legend.position = "none")
 ```
 
 ```{r,include=FALSE}
-width <- 5
-height <- 6
-dpi <- 150
+scale <- 0.84
+width <- 6*scale
+height <- 4*scale
+dpi <- 50
 units <- "in"
 Metric <- "MetricsCondition"
 dir.create(Metric)
@@ -375,8 +388,8 @@ alpha <- 0.4
 SUSDistribution <- ggplot(data = dataFrame, mapping = aes(x = SUS, fill = Condition, alpha = alpha))
 SUSDistribution <- SUSDistribution + geom_density() + ggtitle("SUS distribution") + scale_fill_brewer(palette = Palette)
 
-SUSDistribution <- ggplot(data = dataFrame, mapping = aes(x = SART, fill = Condition, alpha = alpha))
-SUSDistribution <- SUSDistribution + geom_density() + ggtitle("SART distribution") + scale_fill_brewer(palette = Palette)
+SARTDistribution <- ggplot(data = dataFrame, mapping = aes(x = SART, fill = Condition, alpha = alpha))
+SARTDistribution <- SARTDistribution + geom_density() + ggtitle("SART distribution") + scale_fill_brewer(palette = Palette)
 
 CrashDistribution <- ggplot(data = dataFrame, mapping = aes(x = TotalCrash, fill = Condition, alpha = alpha))
 CrashDistribution <- CrashDistribution + geom_density() + ggtitle("Total Crash distribution") + scale_fill_brewer(palette = Palette)
@@ -390,12 +403,12 @@ GlancesDistribution <- GlancesDistribution + geom_density() + ggtitle("Glances d
 GlanceTimeDistribution <- ggplot(data = dataFrame, mapping = aes(x = TotalGlanceTime, fill = Condition, alpha = alpha))
 GlanceTimeDistribution <- GlanceTimeDistribution + geom_density() + ggtitle("Total Glance Time distribution") + scale_fill_brewer(palette = Palette)
 
-plot1<- SUSTotal
-plot2<-SARTTotal
-plot3<-TotalCrashTotal
-plot4<-LaneBreakTotal
-plot5<-GlancesTotal
-plot6<-GlanceTimeTotal
+plot1<- SUSDistribution + guides(alpha = FALSE)
+plot2<-SARTDistribution+ guides(alpha = FALSE)
+plot3<-CrashDistribution+ guides(alpha = FALSE)
+plot4<-LaneBreakDistribution+ guides(alpha = FALSE)
+plot5<-GlancesDistribution+ guides(alpha = FALSE)
+plot6<-GlanceTimeDistribution+ guides(alpha = FALSE)
 
 
 GlancetimeAndGlanceCount <- ggplot(dataFrame, aes(x = TotalGlances, y = TotalGlanceTime, color = Condition)) +
@@ -404,9 +417,10 @@ GlancetimeAndGlanceCount <- ggplot(dataFrame, aes(x = TotalGlances, y = TotalGla
 ```
 
 ```{r,include=FALSE}
-width <- 6
-height <- 4
-dpi <- 150
+scale <- 0.84
+width <- 6*scale
+height <- 4*scale
+dpi <- 50
 units <- "in"
 Metric <- "Metric Distribution"
 dir.create(Metric)
@@ -590,7 +604,6 @@ plot(crashData$Condition,residuals(crashDataModel))
 plot(laneData$Condition,residuals(laneDataModel))
 plot(susData$Condition,residuals(susDataModel))
 plot(sartData$Condition,residuals(sartDataModel))
-
 
 ```
 
