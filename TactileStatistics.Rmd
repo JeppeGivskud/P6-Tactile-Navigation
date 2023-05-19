@@ -329,7 +329,7 @@ plot5 <- plot5 + theme(legend.position = "none")
 plot6 <- plot6 + theme(legend.position = "none")
 
 scale <- 0.84
-width <- 4.3*scale
+width <- 4*scale
 height <- 4*scale
 dpi <- 50
 units <- "in"
