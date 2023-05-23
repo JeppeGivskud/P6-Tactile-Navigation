@@ -80,12 +80,12 @@ pd <- position_dodge(0.1) # move them .05 to the left and right
 
 ```{r, include=FALSE}
 scale <- 0.84
-width <- 6*scale
-height <- 4*scale
+width <- 6 * scale
+height <- 4 * scale
 dpi <- 50
 units <- "in"
 
-#dev.new(width = 5, height = 4, noRStudioGD = TRUE)
+# dev.new(width = 5, height = 4, noRStudioGD = TRUE)
 
 SaveSixPlots <- function(Metric = "NULL", filetype = ".pdf") {
     Palette <- "Set1"
@@ -230,10 +230,10 @@ sd(dataFrame$YearDriversLicence)
 ```
 
 ```{r,echo=FALSE}
-#dev.new(width = 5, height = 4, noRStudioGD = TRUE)
+# dev.new(width = 5, height = 4, noRStudioGD = TRUE)
 scale <- 0.84
-width <- 6*scale
-height <- 4*scale
+width <- 6 * scale
+height <- 4 * scale
 dpi <- 20
 units <- "in"
 Metric <- "Demographics"
@@ -329,8 +329,8 @@ plot5 <- plot5 + theme(legend.position = "none")
 plot6 <- plot6 + theme(legend.position = "none")
 
 scale <- 0.84
-width <- 4*scale
-height <- 4*scale
+width <- 4 * scale
+height <- 4 * scale
 dpi <- 50
 units <- "in"
 Metric <- "MetricsCondition"
@@ -401,12 +401,12 @@ GlancesDistribution <- GlancesDistribution + geom_density() + ggtitle("Glances d
 GlanceTimeDistribution <- ggplot(data = dataFrame, mapping = aes(x = TotalGlanceTime, fill = Condition, alpha = alpha))
 GlanceTimeDistribution <- GlanceTimeDistribution + geom_density() + ggtitle("Total Glance Time distribution") + scale_fill_brewer(palette = Palette)
 
-plot1<- SUSDistribution + guides(alpha = FALSE)
-plot2<-SARTDistribution+ guides(alpha = FALSE)
-plot3<-CrashDistribution+ guides(alpha = FALSE)
-plot4<-LaneBreakDistribution+ guides(alpha = FALSE)
-plot5<-GlancesDistribution+ guides(alpha = FALSE)
-plot6<-GlanceTimeDistribution+ guides(alpha = FALSE)
+plot1 <- SUSDistribution + guides(alpha = FALSE)
+plot2 <- SARTDistribution + guides(alpha = FALSE)
+plot3 <- CrashDistribution + guides(alpha = FALSE)
+plot4 <- LaneBreakDistribution + guides(alpha = FALSE)
+plot5 <- GlancesDistribution + guides(alpha = FALSE)
+plot6 <- GlanceTimeDistribution + guides(alpha = FALSE)
 
 
 GlancetimeAndGlanceCount <- ggplot(dataFrame, aes(x = TotalGlances, y = TotalGlanceTime, color = Condition)) +
@@ -416,8 +416,8 @@ GlancetimeAndGlanceCount <- ggplot(dataFrame, aes(x = TotalGlances, y = TotalGla
 
 ```{r,include=FALSE}
 scale <- 0.84
-width <- 6*scale
-height <- 4*scale
+width <- 6 * scale
+height <- 4 * scale
 dpi <- 50
 units <- "in"
 Metric <- "Metric Distribution"
@@ -451,7 +451,7 @@ Levenes test will be used in case the residuals are not normal distributed to an
 The residuals proved to be normally distributed and the data has homogene variance which means a standard ANOVA test can be used
 ```{r, include=FALSE}
 library(ggpubr)
-# library(tidyverse)
+library(tidyverse)
 # library(broom)
 ```
 
@@ -534,10 +534,22 @@ get_summary_stats(laneData)
 
 laneData %>%
     group_by(Condition) %>%
+    summarise_at(vars(LaneBreaks), list(name = mean))
+
+laneData %>%
+    group_by(Condition) %>%
     identify_outliers(LaneBreaks)
 
 laneDataModel <- lm(LaneBreaks ~ Condition, data = laneData)
-ggqqplot(residuals(laneDataModel))
+summary(laneDataModel)
+plot(laneDataModel)
+laneBreakqqPlot <- ggqqplot(residuals(laneDataModel))
+laneBreakqqPlot
+
+dir <- "laneBreaksANOVA"
+dir.create(dir)
+ggsave(filename = "laneBreakqqPlot.pdf", plot = laneBreakqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
+
 shapiro_test(residuals(laneDataModel))
 
 laneData %>% levene_test(LaneBreaks ~ Condition)
@@ -596,13 +608,12 @@ plot(residuals(laneDataModel))
 plot(residuals(susDataModel))
 plot(residuals(sartDataModel))
 
-plot(glanceTimeData$Condition,residuals(glanceTimeModel))
-plot(glanceCountData$Condition,residuals(glanceCountModel))
-plot(crashData$Condition,residuals(crashDataModel))
-plot(laneData$Condition,residuals(laneDataModel))
-plot(susData$Condition,residuals(susDataModel))
-plot(sartData$Condition,residuals(sartDataModel))
-
+plot(glanceTimeData$Condition, residuals(glanceTimeModel))
+plot(glanceCountData$Condition, residuals(glanceCountModel))
+plot(crashData$Condition, residuals(crashDataModel))
+plot(laneData$Condition, residuals(laneDataModel))
+plot(susData$Condition, residuals(susDataModel))
+plot(sartData$Condition, residuals(sartDataModel))
 ```
 
 
