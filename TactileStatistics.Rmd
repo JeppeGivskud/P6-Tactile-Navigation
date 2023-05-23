@@ -1437,3 +1437,25 @@ The shapiro shows a significant result, meaning the residuals are not normally d
 Through conducting a levene test it also shows no homoscedasticity of variance between tasks
 
 This means all assumptions for ANOVA are broken, possibly due to too many extreme outliers in the dataset 
+
+```{r}
+taskLongDataFrame$Single_Glance_duration <- log10(taskLongDataFrame$Single_Glance_duration+1)
+
+taskShortDataFrame$Total_glance_duration_pr_task <- log10(taskShortDataFrame$Total_glance_duration_pr_task+1)
+
+singleGlanceBox <- ggplot(taskLongDataFrame, aes(x = factor(Task_nr), y = Single_Glance_duration, fill = factor(Task_nr))) +
+    geom_boxplot() +
+    scale_fill_brewer(palette = "Spectral") +
+    labs(x = "Task Nr", y = "Single glance time [s]", fill = "Task Nr", title = "Single glance time grouped by task") +
+    theme(plot.title = element_text(hjust = 0.5))
+singleGlanceBox
+
+
+glanceTaskBox <- ggplot(taskShortDataFrame, aes(x = Task_nr, y = Total_glance_duration_pr_task, group = Task_nr, fill = factor(Task_nr))) +
+    geom_boxplot() +
+    scale_fill_brewer(palette = "Spectral") +
+    labs(x = "Task Nr", y = "Total glance time [s]", fill = "Task Nr", title = "Total glance time grouped by task number") +
+    theme(plot.title = element_text(hjust = 0.5))
+glanceTaskBox
+```
+
