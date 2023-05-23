@@ -453,6 +453,8 @@ The residuals proved to be normally distributed and the data has homogene varian
 library(ggpubr)
 library(tidyverse)
 # library(broom)
+dir <- "QQplots"
+dir.create(dir)
 ```
 
 ```{r}
@@ -465,9 +467,10 @@ glanceTimeData %>%
     identify_outliers(TotalGlanceTime)
 
 glanceTimeModel <- lm(TotalGlanceTime ~ Condition, data = glanceTimeData)
-ggqqplot(residuals(glanceTimeModel))
+glanceTimeqqPlot <- ggqqplot(residuals(glanceTimeModel))
 shapiro_test(residuals(glanceTimeModel))
 
+ggsave(filename = "glanceTimeqqPlot.pdf", plot = glanceTimeqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
 # We use a bartlett test as the residuals are normally distributed
 bartlett.test(TotalGlanceTime ~ Condition, data = glanceTimeData)
 
@@ -486,8 +489,10 @@ glanceCountData %>%
     identify_outliers(TotalGlances)
 
 glanceCountModel <- lm(TotalGlances ~ Condition, data = glanceCountData)
-ggqqplot(residuals(glanceCountModel))
+glanceCountqqPlot <- ggqqplot(residuals(glanceCountModel))
 shapiro_test(residuals(glanceCountModel))
+
+ggsave(filename = "glanceCountqqPlot.pdf", plot = glanceCountqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
 
 bartlett.test(TotalGlances ~ Condition, data = glanceCountData)
 
@@ -506,8 +511,10 @@ crashData %>%
     identify_outliers(TotalCrash)
 
 crashDataModel <- lm(TotalCrash ~ Condition, data = crashData)
-ggqqplot(residuals(crashDataModel))
+crashCountqqPlot <- ggqqplot(residuals(crashDataModel))
 shapiro_test(residuals(crashDataModel))
+
+ggsave(filename = "crashCountqqPlot.pdf", plot = crashCountqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
 
 crashData %>% levene_test(TotalCrash ~ Condition)
 
@@ -546,8 +553,6 @@ plot(laneDataModel)
 laneBreakqqPlot <- ggqqplot(residuals(laneDataModel))
 laneBreakqqPlot
 
-dir <- "laneBreaksANOVA"
-dir.create(dir)
 ggsave(filename = "laneBreakqqPlot.pdf", plot = laneBreakqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
 
 shapiro_test(residuals(laneDataModel))
@@ -569,8 +574,10 @@ susData %>%
     identify_outliers(SUS)
 
 susDataModel <- lm(SUS ~ Condition, data = susData)
-ggqqplot(residuals(susDataModel))
+susqqPlot <- ggqqplot(residuals(susDataModel))
 shapiro_test(residuals(susDataModel))
+
+ggsave(filename = "susqqPlot.pdf", plot = susqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
 
 susData %>% levene_test(SUS ~ Condition)
 
@@ -590,8 +597,10 @@ sartData %>%
     identify_outliers(SART)
 
 sartDataModel <- lm(SART ~ Condition, data = sartData)
-ggqqplot(residuals(sartDataModel))
+sartqqPlot <- ggqqplot(residuals(sartDataModel))
 shapiro_test(residuals(sartDataModel))
+
+ggsave(filename = "sartqqPlot.pdf", plot = sartqqPlot, path = dir, width = width, height = height, dpi = dpi, units = units)
 
 bartlett.test(SART ~ Condition, data = sartData)
 
