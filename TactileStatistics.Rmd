@@ -337,30 +337,30 @@ TotalGlanceTime
   Total Lane breaks
 ```{r}
 HistSUS <- ggplot(dataFrame, aes(x=SUS,fill=Condition, color=Condition)) +
-  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 45, to = 100, by = 2))
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 45, to = 100, by = 5))
 
 HistSART<- ggplot(dataFrame, aes(x=SART,fill=Condition, color=Condition)) +
   geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 30, by = 2))
 
 HistTotalGlanceTime<- ggplot(dataFrame, aes(x=TotalGlanceTime,fill=Condition, color=Condition)) +
-  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 4))
 
 HistTotalGlances<- ggplot(dataFrame, aes(x=TotalGlances,fill=Condition, color=Condition)) +
-  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 5))
 
 HistTotalCrash<- ggplot(dataFrame, aes(x=TotalCrash,fill=Condition, color=Condition)) +
-  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 1))
 
 HistTotalLaneBreaks<- ggplot(dataFrame, aes(x=LaneBreaks,fill=Condition, color=Condition)) +
-  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 1))
 
 
-HistSUS + scale_fill_brewer(palette = Palette)
-HistSART + scale_fill_brewer(palette = Palette)
-HistTotalGlanceTime + scale_fill_brewer(palette = Palette)
-HistTotalGlances + scale_fill_brewer(palette = Palette)
-HistTotalCrash + scale_fill_brewer(palette = Palette)
-HistTotalLaneBreaks + scale_fill_brewer(palette = Palette)
+HistSUS 
+HistSART 
+HistTotalGlanceTime 
+HistTotalGlances 
+HistTotalCrash 
+HistTotalLaneBreaks 
 ```
 ```{r}
 scale <- 0.84
