@@ -125,6 +125,7 @@ SaveSixPlots <- function(Metric = "NULL", filetype = ".pdf") {
 }
 ```
 
+
 ## Introduction
 A study on driving performance and In Vehicle infotainment system has been done. The study aims to answer two questions.
 1) Can the addition of tactile navigation improve driving performance
@@ -451,7 +452,7 @@ Levenes test will be used in case the residuals are not normal distributed to an
 The residuals proved to be normally distributed and the data has homogene variance which means a standard ANOVA test can be used
 ```{r, include=FALSE}
 library(ggpubr)
-library(tidyverse)
+#library(tidyverse)
 # library(broom)
 dir <- "QQplots"
 dir.create(dir)
@@ -541,10 +542,6 @@ get_summary_stats(laneData)
 
 laneData %>%
     group_by(Condition) %>%
-    summarise_at(vars(LaneBreaks), list(name = mean))
-
-laneData %>%
-    group_by(Condition) %>%
     identify_outliers(LaneBreaks)
 
 laneDataModel <- lm(LaneBreaks ~ Condition, data = laneData)
@@ -623,13 +620,6 @@ plot(crashData$Condition, residuals(crashDataModel))
 plot(laneData$Condition, residuals(laneDataModel))
 plot(susData$Condition, residuals(susDataModel))
 plot(sartData$Condition, residuals(sartDataModel))
-```
-
-
-```{r, include=FALSE}
-detach("package:ggpubr")
-# detach("package:tidyverse")
-# detach("package:broom")
 ```
 
 ### Analysis of use of aid grouped by condition
