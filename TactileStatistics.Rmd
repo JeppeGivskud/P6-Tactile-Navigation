@@ -249,6 +249,146 @@ ggsave(filename = "AutomaticExperienceCondition.pdf", plot = AutomaticExperience
 ggsave(filename = "CarSimulatorExperienceCondition.pdf", plot = CarSimulatorExperienceCondition, path = Metric, width = width, height = height, dpi = dpi, units = units)
 ```
 
+## Raw data visualisation
+
+Boxplots:
+  SUS
+  SART
+  Total glance time
+
+Stacked Bar:
+  Total Glances
+  Total Crashes
+  Total Lane breaks
+
+```{r}
+SUSBox <- ggplot(dataFrame, aes(x = Condition, y = SUS, fill = Condition)) +
+    geom_boxplot() +
+    scale_fill_brewer(palette = "Set1") +
+    labs(x = "Condition", y = "SUS score", title = "SUS score grouped by condition") +
+    theme(plot.title = element_text(hjust = 0.5))
+SARTBox <- ggplot(dataFrame, aes(x = Condition, y = SART, fill = Condition)) +
+    geom_boxplot() +
+    scale_fill_brewer(palette = "Set1") +
+    labs(x = "Condition", y = "SART score", title = "SART score grouped by condition") +
+    theme(plot.title = element_text(hjust = 0.5))
+TotalGlanceTimeBox <- ggplot(dataFrame, aes(x = Condition, y = TotalGlanceTime, fill = Condition)) +
+    geom_boxplot() +
+    scale_fill_brewer(palette = "Set1") +
+    labs(x = "Condition", y = "Glance time", title = "Glance time grouped by condition") +
+    theme(plot.title = element_text(hjust = 0.5))
+
+SUSBox
+SARTBox
+TotalGlanceTimeBox
+```
+
+```{r}
+TotalGlances <- ggplot(data = dataFrame, mapping = aes(x = Condition, y = TotalGlances, fill = Condition))
+TotalGlances <- TotalGlances + geom_col(col = "black") + scale_y_continuous(name = "Glances") + ggtitle("Total Glances")
+
+TotalCrash <- ggplot(data = dataFrame, mapping = aes(x = Condition, y = TotalCrash, fill = Condition))
+TotalCrash <- TotalCrash + geom_col(col = "black") + scale_y_continuous(name = "Crashes", breaks = c(0:15)) + ggtitle("Total Crash")
+
+TotalLaneBreaks <- ggplot(data = dataFrame, mapping = aes(x = Condition, y = LaneBreaks, fill = Condition))
+TotalLaneBreaks <- TotalLaneBreaks + geom_col(col = "black") + scale_y_continuous(name = "Lane breaks") + ggtitle("Total Lane Breaks")
+
+
+
+```
+```{r}
+
+Palette <- "Set1"
+TotalGlances <- TotalGlances + scale_fill_brewer(palette = Palette)
+TotalCrash <- TotalCrash + scale_fill_brewer(palette = Palette)
+TotalLaneBreaks <- TotalLaneBreaks + scale_fill_brewer(palette = Palette)
+```
+```{r}
+#dev.new(width = 5, height = 4, noRStudioGD = TRUE)
+scale <- 0.84
+width <- 6*scale
+height <- 4*scale
+dpi <- 400
+units <- "in"
+Metric <- "Raw Data Visualized"
+dir.create(Metric)
+
+ggsave(filename = "SUSBox.pdf", plot = SUSBox, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "SARTBox.pdf", plot = SARTBox, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlanceTimeBox.pdf", plot = TotalGlanceTimeBox, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlancesBar.pdf", plot = TotalGlances, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalCrashBar.pdf", plot = TotalCrash, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalLaneBreaksBar.pdf", plot = TotalLaneBreaks, path = Metric, width = width, height = height, dpi = dpi, units = units)
+
+ggsave(filename = "SUSBox.png", plot = SUSBox, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "SARTBox.png", plot = SARTBox, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlanceTimeBox.png", plot = TotalGlanceTimeBox, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlancesBar.png", plot = TotalGlances, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalCrashBar.png", plot = TotalCrash, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalLaneBreaksBar.png", plot = TotalLaneBreaks, path = Metric, width = width, height = height, dpi = dpi, units = units)
+```
+
+## Histograms
+SUS 
+SART
+TotalGlanceTime
+  Total Glances
+  Total Crashes
+  Total Lane breaks
+```{r}
+HistSUS <- ggplot(dataFrame, aes(x=SUS,fill=Condition, color=Condition)) +
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 45, to = 100, by = 2))
+
+HistSART<- ggplot(dataFrame, aes(x=SART,fill=Condition, color=Condition)) +
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 30, by = 2))
+
+HistTotalGlanceTime<- ggplot(dataFrame, aes(x=TotalGlanceTime,fill=Condition, color=Condition)) +
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+
+HistTotalGlances<- ggplot(dataFrame, aes(x=TotalGlances,fill=Condition, color=Condition)) +
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+
+HistTotalCrash<- ggplot(dataFrame, aes(x=TotalCrash,fill=Condition, color=Condition)) +
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+
+HistTotalLaneBreaks<- ggplot(dataFrame, aes(x=LaneBreaks,fill=Condition, color=Condition)) +
+  geom_histogram(alpha=0.8, position="dodge") + scale_x_continuous(breaks = seq(from = 0, to = 600, by = 2))
+
+
+HistSUS + scale_fill_brewer(palette = Palette)
+HistSART + scale_fill_brewer(palette = Palette)
+HistTotalGlanceTime + scale_fill_brewer(palette = Palette)
+HistTotalGlances + scale_fill_brewer(palette = Palette)
+HistTotalCrash + scale_fill_brewer(palette = Palette)
+HistTotalLaneBreaks + scale_fill_brewer(palette = Palette)
+```
+```{r}
+scale <- 0.84
+width <- 6*scale
+height <- 4*scale
+dpi <- 400
+units <- "in"
+Metric <- "Raw Data Visualized"
+dir.create(Metric)
+
+ggsave(filename = "SUSHist.pdf", plot = HistSUS, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "SARTHist.pdf", plot = HistSART, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlanceTimeHist.pdf", plot = HistTotalGlanceTime, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlancesHist.pdf", plot = HistTotalGlances, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalCrashHist.pdf", plot = HistTotalCrash, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalLaneBreaksHist.pdf", plot = HistTotalLaneBreaks, path = Metric, width = width, height = height, dpi = dpi, units = units)
+
+ggsave(filename = "SUSHist.png", plot = HistSUS, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "SARTHist.png", plot = HistSART, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlanceTimeHist.png", plot = HistTotalGlanceTime, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalGlancesHist.png", plot = HistTotalGlances, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalCrashBarHist.png", plot = HistTotalCrash, path = Metric, width = width, height = height, dpi = dpi, units = units)
+ggsave(filename = "TotalLaneBreaksBarHist.png", plot = HistTotalLaneBreaks, path = Metric, width = width, height = height, dpi = dpi, units = units)
+```
+
+
+
+
 ## Effect due to condition
 To answer the first question of whether condition have an effect on the 6 metrics we'll create a plot of means with confidence (95%) as whiskers. According to Geoff Cumming and Sue Finch if the data has the same standard deviation it is possible to gain insight into which data could be significantly different.
 
